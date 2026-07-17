@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (!overlay) return;
 
-    // Total wait = last animation end (delay 1.0s + duration 1.25s = 2.25s) + hold time (1.5s)
+    // durasi animasi = animasi terakhir berakhir (delay 1.0s + duration 1.25s = 2.25s) + hold time (1.5s)
     const TOTAL_WAIT_MS = 3750;
 
     setTimeout(function () {
