@@ -387,3 +387,270 @@ body {
         gap: 2rem;
     }
 }
+
+
+/* SERVICE SECTION */
+.service {
+    padding: 7rem 7% 6rem;
+    position: relative;
+    background-image:
+        linear-gradient(
+            to bottom,
+            rgba(18, 18, 18, 0.97) 0%,
+            rgba(18, 18, 18, 0.88) 30%,
+            rgba(18, 18, 18, 0.92) 70%,
+            rgba(18, 18, 18, 0.97) 100%
+        ),
+        url('/Img/hero_image.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+/* Subtle top divider line */
+.service::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 7%;
+    right: 7%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+}
+
+/* Section Header */
+.service-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.service-badge {
+    display: inline-block;
+    padding: 0.6rem 1.4rem;
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 50px;
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent-color);
+    margin-bottom: 1.5rem;
+}
+
+.service-header h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-main);
+    margin-bottom: 1rem;
+}
+
+.service-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* Service List — vertical stack */
+.service-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 820px;
+    margin: 0 auto;
+}
+
+/* Service Card — horizontal layout */
+.service-card {
+    display: flex;
+    align-items: stretch;
+    gap: 1.8rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    transition:
+        transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.45s ease,
+        background 0.45s ease;
+    cursor: default;
+}
+
+.service-card:hover {
+    transform: translateY(-6px);
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(212, 175, 55, 0.2);
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.35),
+        0 0 30px rgba(212, 175, 55, 0.06);
+}
+
+/* Image — square with rounded corners */
+.service-card-img {
+    flex-shrink: 0;
+    width: 130px;
+    height: 130px;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+}
+
+.service-card-img::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    pointer-events: none;
+}
+
+.service-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.service-card:hover .service-card-img img {
+    transform: scale(1.08);
+}
+
+/* Info — right side */
+.service-card-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+}
+
+.service-card-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.6rem;
+}
+
+.service-card-head h3 {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-main);
+    transition: color 0.3s ease;
+}
+
+.service-card:hover .service-card-head h3 {
+    color: var(--accent-color);
+}
+
+.service-price {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    padding: 0.25rem 0.8rem;
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 6px;
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.service-card:hover .service-price {
+    background: rgba(212, 175, 55, 0.14);
+    border-color: rgba(212, 175, 55, 0.35);
+}
+
+.service-card-info p {
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+
+/* FADE-UP SCROLL ANIMATION (transition-based, repeatable) */
+[data-fade-up] {
+    opacity: 0;
+    transform: translateY(40px);
+    transition:
+        opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Staggered transition delays */
+[data-fade-up]:nth-child(2) { transition-delay: 0.1s; }
+[data-fade-up]:nth-child(3) { transition-delay: 0.15s; }
+[data-fade-up]:nth-child(4) { transition-delay: 0.2s; }
+[data-fade-up]:nth-child(5) { transition-delay: 0.25s; }
+
+/* Visible state — toggled by IntersectionObserver */
+[data-fade-up].is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* SERVICE — RESPONSIVE */
+@media (max-width: 768px) {
+    .service {
+        padding: 5rem 5% 4rem;
+        background-attachment: scroll; /* fixed doesn't work on mobile */
+    }
+
+    .service-header {
+        margin-bottom: 3rem;
+    }
+
+    /* Stack vertically on mobile */
+    .service-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1.2rem;
+        padding: 1.8rem 1.5rem;
+    }
+
+    .service-card-img {
+        width: 100%;
+        max-width: 280px;
+        height: 200px;
+        border-radius: 12px;
+    }
+
+    .service-card-head {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .service-card-info p {
+        font-size: 0.88rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .service {
+        padding: 4rem 4% 3rem;
+    }
+
+    .service-card {
+        padding: 1.4rem 1.2rem;
+    }
+
+    .service-card-img {
+        max-width: 100%;
+        height: 180px;
+    }
+}

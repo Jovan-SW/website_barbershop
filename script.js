@@ -1,6 +1,4 @@
-/* ============================================================
-   INTRO PRELOADER — Lifecycle Controller
-   ============================================================ */
+/* INTRO PRELOADER — Lifecycle Controller */
 document.addEventListener('DOMContentLoaded', function () {
     const overlay = document.getElementById('intro-overlay');
 
@@ -45,3 +43,30 @@ document.addEventListener('click', function (e) {
         navbarNav.classList.remove('active');
     }
 });
+
+
+/* SCROLL UP ANIMATION  */
+(function () {
+    const fadeEls = document.querySelectorAll('[data-fade-up]');
+    if (!fadeEls.length) return;
+
+    const observer = new IntersectionObserver(
+        function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                } else {
+                    entry.target.classList.remove('is-visible');
+                }
+            });
+        },
+        {
+            threshold: 0.15,
+            rootMargin: '0px 0px -60px 0px'
+        }
+    );
+
+    fadeEls.forEach(function (el) {
+        observer.observe(el);
+    });
+})();
