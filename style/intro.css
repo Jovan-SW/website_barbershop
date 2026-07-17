@@ -1,0 +1,378 @@
+/* ── 1. CONTAINER OVERLAY ─────────────────────────────────── */
+.intro-overlay {
+    position: fixed;
+    inset: 0;                            /* shorthand for top/right/bottom/left: 0 */
+    z-index: 99999;                      /* above everything, including navbar z:9999 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0d0d0d;
+    overflow: hidden;
+
+    /* Exit transition: slide-up + fade out */
+    transition: transform 0.8s cubic-bezier(0.76, 0, 0.24, 1),
+                opacity 0.8s cubic-bezier(0.76, 0, 0.24, 1);
+    will-change: transform, opacity;
+}
+
+/* State: after all papers have landed, JS adds this class */
+.intro-overlay.intro-done {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* State: fully hidden — remove from rendering tree */
+.intro-overlay.intro-hidden {
+    display: none;
+}
+
+/* ── 2. COLLAGE STAGE (center area where papers gather) ──── */
+.intro-collage {
+    position: relative;
+    width: clamp(280px, 60vw, 600px);     /* responsive width */
+    height: clamp(200px, 40vh, 420px);     /* responsive height */
+}
+
+/* ── 3. INDIVIDUAL PAPER SCRAPS ──────────────────────────── */
+.paper-scrap {
+    position: absolute;
+    will-change: transform, opacity;
+    opacity: 0;                           /* hidden until animation plays */
+    backface-visibility: hidden;          /* prevent sub-pixel jitter */
+    -webkit-backface-visibility: hidden;
+
+    /* Common paper visual style */
+    background-color: #1c1c1c;
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    box-shadow: 4px 6px 20px rgba(0, 0, 0, 0.6),
+                inset 0 0 30px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Paper content typography */
+.paper-scrap .paper-label {
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: rgba(245, 245, 247, 0.9);
+    text-align: center;
+    line-height: 1.2;
+}
+
+.paper-scrap .paper-sub {
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    color: var(--accent-color, #d4af37);
+    text-transform: uppercase;
+    margin-top: 4px;
+}
+
+/* ── Paper accent line decoration ─────────────────────────── */
+.paper-scrap::before {
+    content: '';
+    position: absolute;
+    background: var(--accent-color, #d4af37);
+}
+
+/* ── 4. INDIVIDUAL PAPER STYLES & POSITIONS ──────────────── */
+
+/* Paper 1 — Large center piece (logo / brand name) */
+.paper-scrap:nth-child(1) {
+    width: clamp(160px, 45%, 260px);
+    height: clamp(90px, 28%, 130px);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 7;
+    animation: flyFromTop 1.1s cubic-bezier(0.22, 1.4, 0.36, 1) 0.1s forwards;
+}
+.paper-scrap:nth-child(1) .paper-label {
+    font-size: clamp(1.4rem, 4vw, 2.4rem);
+    font-weight: 700;
+}
+.paper-scrap:nth-child(1)::before {
+    bottom: 0;
+    left: 10%;
+    width: 80%;
+    height: 3px;
+}
+
+/* Paper 2 — Top-left: "EST. 2018" */
+.paper-scrap:nth-child(2) {
+    width: clamp(100px, 28%, 160px);
+    height: clamp(55px, 18%, 80px);
+    top: 8%;
+    left: 5%;
+    z-index: 5;
+    animation: flyFromLeft 1.0s cubic-bezier(0.22, 1.3, 0.36, 1) 0.25s forwards;
+}
+.paper-scrap:nth-child(2) .paper-label {
+    font-size: clamp(0.7rem, 2vw, 1rem);
+    font-weight: 600;
+}
+.paper-scrap:nth-child(2)::before {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+}
+
+/* Paper 3 — Top-right: "PREMIUM" */
+.paper-scrap:nth-child(3) {
+    width: clamp(110px, 30%, 170px);
+    height: clamp(50px, 16%, 70px);
+    top: 5%;
+    right: 8%;
+    z-index: 4;
+    animation: flyFromRight 1.05s cubic-bezier(0.22, 1.35, 0.36, 1) 0.4s forwards;
+}
+.paper-scrap:nth-child(3) .paper-label {
+    font-size: clamp(0.8rem, 2.2vw, 1.15rem);
+    font-weight: 500;
+    letter-spacing: 6px;
+}
+.paper-scrap:nth-child(3)::before {
+    bottom: 0;
+    right: 0;
+    width: 40%;
+    height: 2px;
+}
+
+/* Paper 4 — Bottom-left: scissors icon / "CUTS" */
+.paper-scrap:nth-child(4) {
+    width: clamp(90px, 25%, 140px);
+    height: clamp(75px, 22%, 110px);
+    bottom: 10%;
+    left: 10%;
+    z-index: 6;
+    animation: flyFromBottom 1.15s cubic-bezier(0.22, 1.25, 0.36, 1) 0.55s forwards;
+}
+.paper-scrap:nth-child(4) .paper-label {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+}
+.paper-scrap:nth-child(4)::before {
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 100%;
+}
+
+/* Paper 5 — Bottom-right: "GROOMING" */
+.paper-scrap:nth-child(5) {
+    width: clamp(115px, 32%, 180px);
+    height: clamp(50px, 15%, 68px);
+    bottom: 15%;
+    right: 5%;
+    z-index: 3;
+    animation: flyFromRight 1.1s cubic-bezier(0.22, 1.3, 0.36, 1) 0.7s forwards;
+}
+.paper-scrap:nth-child(5) .paper-label {
+    font-size: clamp(0.65rem, 1.8vw, 0.9rem);
+    letter-spacing: 5px;
+    font-weight: 400;
+}
+.paper-scrap:nth-child(5)::before {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+}
+
+/* Paper 6 — Mid-left overlap: "STYLE" */
+.paper-scrap:nth-child(6) {
+    width: clamp(80px, 22%, 130px);
+    height: clamp(45px, 14%, 65px);
+    top: 38%;
+    left: 2%;
+    z-index: 2;
+    animation: flyFromLeft 1.2s cubic-bezier(0.22, 1.2, 0.36, 1) 0.85s forwards;
+}
+.paper-scrap:nth-child(6) .paper-label {
+    font-size: clamp(0.8rem, 2vw, 1.1rem);
+    font-weight: 600;
+    letter-spacing: 4px;
+}
+.paper-scrap:nth-child(6)::before {
+    bottom: 0;
+    left: 0;
+    width: 2px;
+    height: 100%;
+}
+
+/* Paper 7 — Mid-right small accent: "★★★★★" */
+.paper-scrap:nth-child(7) {
+    width: clamp(75px, 20%, 120px);
+    height: clamp(40px, 12%, 55px);
+    top: 30%;
+    right: 3%;
+    z-index: 1;
+    animation: flyFromTop 1.25s cubic-bezier(0.22, 1.15, 0.36, 1) 1.0s forwards;
+}
+.paper-scrap:nth-child(7) .paper-label {
+    font-size: clamp(0.7rem, 1.6vw, 0.9rem);
+    letter-spacing: 3px;
+    color: var(--accent-color, #d4af37);
+}
+.paper-scrap:nth-child(7)::before {
+    top: 0;
+    right: 0;
+    width: 30%;
+    height: 2px;
+}
+
+
+/* ── 5. FINAL ROTATION — each paper gets a unique "stuck" angle ── */
+/*    Applied via CSS custom property --rot set inline on each element */
+
+.paper-scrap:nth-child(1) { --rot: -2deg;  }
+.paper-scrap:nth-child(2) { --rot:  8deg;  }
+.paper-scrap:nth-child(3) { --rot: -6deg;  }
+.paper-scrap:nth-child(4) { --rot: 12deg;  }
+.paper-scrap:nth-child(5) { --rot: -10deg; }
+.paper-scrap:nth-child(6) { --rot:  5deg;  }
+.paper-scrap:nth-child(7) { --rot: -14deg; }
+
+
+/* ============================================================
+   6. KEYFRAME ANIMATIONS — "Paper Flying In"
+   ============================================================
+   Each direction starts off-screen with exaggerated rotation
+   and scale, then "snaps" into position with organic bounce
+   via cubic-bezier overshoot (values > 1.0 on 2nd param).
+   
+   The final state includes:
+   - Full opacity
+   - Subtle random rotation via var(--rot)
+   - Slight scale bounce (1.0 → 1.05 → 1.0 baked into bezier)
+   ============================================================ */
+
+/* From TOP (above viewport) */
+@keyframes flyFromTop {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) translateY(-120vh) rotate(-35deg) scale(0.6);
+    }
+    60% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) translateY(0) rotate(var(--rot, 0deg)) scale(1);
+    }
+}
+
+/* From LEFT (off-screen left) */
+@keyframes flyFromLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-120vw) rotate(40deg) scale(0.5);
+    }
+    60% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0) rotate(var(--rot, 0deg)) scale(1);
+    }
+}
+
+/* From RIGHT (off-screen right) */
+@keyframes flyFromRight {
+    0% {
+        opacity: 0;
+        transform: translateX(120vw) rotate(-45deg) scale(0.5);
+    }
+    60% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0) rotate(var(--rot, 0deg)) scale(1);
+    }
+}
+
+/* From BOTTOM (below viewport) */
+@keyframes flyFromBottom {
+    0% {
+        opacity: 0;
+        transform: translateY(120vh) rotate(30deg) scale(0.6);
+    }
+    60% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) rotate(var(--rot, 0deg)) scale(1);
+    }
+}
+
+
+/* ============================================================
+   7. BODY SCROLL LOCK — prevent scrolling during intro
+   ============================================================ */
+body.intro-active {
+    overflow: hidden;
+}
+
+
+/* ============================================================
+   8. RESPONSIVE ADJUSTMENTS
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 768px) {
+    .intro-collage {
+        width: clamp(250px, 80vw, 420px);
+        height: clamp(200px, 50vh, 350px);
+    }
+
+    .paper-scrap {
+        box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.5),
+                    inset 0 0 20px rgba(0, 0, 0, 0.25);
+    }
+}
+
+/* Mobile small */
+@media (max-width: 480px) {
+    .intro-collage {
+        width: clamp(220px, 90vw, 340px);
+        height: clamp(180px, 55vh, 300px);
+    }
+
+    .paper-scrap .paper-label {
+        letter-spacing: 1.5px;
+    }
+
+    .paper-scrap .paper-sub {
+        font-size: 0.55rem;
+        letter-spacing: 1px;
+    }
+}
+
+
+/* ============================================================
+   9. REDUCED MOTION — respect prefers-reduced-motion
+   ============================================================
+   If user has motion sensitivity, skip fly-in and just fade.
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+    .paper-scrap {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0s !important;
+    }
+
+    .intro-overlay {
+        transition-duration: 0.01ms !important;
+    }
+
+    .intro-overlay.intro-done {
+        transform: none;
+        opacity: 0;
+    }
+}
