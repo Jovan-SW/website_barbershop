@@ -70,3 +70,32 @@ document.addEventListener('click', function (e) {
         observer.observe(el);
     });
 })();
+
+/* BOOKING FORM & POPUP LOGIC */
+const bookingForm = document.getElementById('booking-form');
+const successModal = document.getElementById('success-modal');
+const modalCloseBtn = document.getElementById('modal-close-btn');
+const modalOverlay = document.getElementById('modal-overlay');
+
+if (bookingForm && successModal) {
+    bookingForm.addEventListener('submit', function(e) {
+        e.preventDefault(); // Mencegah form untuk redirect atau refresh
+        
+        // Cek validasi HTML5 bawaan sebelum memunculkan popup
+        if (bookingForm.checkValidity()) {
+            successModal.classList.add('is-open');
+            successModal.setAttribute('aria-hidden', 'false');
+            
+            // Reset isi form
+            bookingForm.reset();
+        }
+    });
+
+    const closeModal = () => {
+        successModal.classList.remove('is-open');
+        successModal.setAttribute('aria-hidden', 'true');
+    };
+
+    modalCloseBtn.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', closeModal);
+}

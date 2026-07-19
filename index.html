@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Nikmati pengalaman potong rambut premium, hot towel shave, dan hair treatment terbaik. Kapster berpengalaman siap bikin penampilan lu makin ganteng.">
     <title>Barber'O</title>
-    <link rel="icon" type="image/x-icon" href="/Img/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/Img/favicon.jpeg">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -74,8 +74,8 @@
         <ul class="navbar-nav">
             <li><a href="#home">Home</a></li>
             <li><a href="#service">Services</a></li>
+            <li><a href="#barbers">Barbers</a></li>
             <li><a href="#booking">Book an Appointment</a></li>
-            <li><a href="#contact">Contact</a></li>
         </ul>
 
         <div class="navbar-extra">
@@ -200,77 +200,157 @@
         </div>
      </section>
 
+     <!-- Barbers -->
+    <section class="barbers" id="barbers">
+        <div class="barbers__container">
+            <div class="barbers__header">
+                <span class="barbers__badge">Barber'S</span>
+                <h2 class="barbers__title">Meet Our Barbers</h2>
+                <p class="barbers__desc">Discover the talented barbers who will transform your look with their expertise and passion for grooming.</p>
+            </div>
+            <div class="barbers__content" data-fade-up>
+                <!-- Barber Card 1 -->
+                <div class="barber-card">
+                    <div class="barber-card__image">
+                        <img src="/Img/barber1.jpeg" alt="John Doe">
+                    </div>
+                    <div class="barber-card__info">
+                        <h3 class="barber-card__name">John Doe</h3>
+                        <span class="barber-card__specialty">Master Barber</span>
+                        <div class="specialty">
+                            <p><span>Specialty:</span>Clasic Cut & Pompadour Expert</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Barber Card 2 -->
+                <div class="barber-card">
+                    <div class="barber-card__image">
+                        <img src="/Img/barber2.jpeg" alt="Jane Smith">
+                    </div>
+                    <div class="barber-card__info">
+                        <h3 class="barber-card__name">Jane Smith</h3>
+                        <span class="barber-card__specialty">Senior Barber</span>
+                        <div class="specialty">
+                            <p><span>Specialty:</span>Textured Fades & Styling Expert</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Barber Card 3 -->
+                <div class="barber-card">
+                    <div class="barber-card__image">
+                        <img src="/Img/barber3.jpeg" alt="Mike Johnson">
+                    </div>
+                    <div class="barber-card__info">
+                        <h3 class="barber-card__name">Mike Johnson</h3>
+                        <span class="barber-card__specialty">Junior Barber</span>
+                        <div class="specialty">
+                            <p><span>Specialty:</span>Modern Fades & Hair Tatto Specialist</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Barber Card 4 -->
+                <div class="barber-card">
+                    <div class="barber-card__image">
+                        <img src="/Img/barber4.jpeg" alt="Budi Santoso">
+                    </div>
+                    <div class="barber-card__info">
+                        <h3 class="barber-card__name">Budi Santoso</h3>
+                        <span class="barber-card__specialty">Junior Barber</span>
+                        <div class="specialty">
+                            <p><span>Specialty:</span>Beard Grooming & Hot Towel Shave Master</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
      <!-- Booking section -->
      <section class="booking" id="booking">
-        <!-- Booking Header -->
-        <div class="booking-header">
-            <span class="booking-badge">BOOK APPOINTMENT</span>
-            <h2>Reserve Your Seat</h2>
-            <p>Book your appointment in advance to ensure you get your preferred time slot. Walk-ins are also welcome!</p>   
-        </div>
+        <div class="booking__container">
+            <div class="booking__header">
+                <span class="booking__badge">BOOK APPOINTMENT</span>
+                <h2 class="booking__title">Reserve Your Seat</h2>
+                <p class="booking__desc">Step into luxury. Secure your preferred time slot and let our master barbers elevate your style. Experience grooming tailored to perfection.</p>   
+            </div>
 
-        <!-- Booking Paper -->
-        <div class="booking-paper">
-            <div class="paper-header">
-                <h3>Appointment Form</h3>
+            <div class="booking__content" data-fade-up>
+                <div class="booking__paper">
+                    <form class="booking__form" id="booking-form">
+                        <div class="booking__form-header">
+                            <h3>Appointment Form</h3>
+                            <p>Fill out the details below</p>
+                        </div>
+                        
+                        <div class="booking__row">
+                            <div class="booking__group">
+                                <label class="booking__label" for="name">Full Name</label>
+                                <input class="booking__input" type="text" id="name" name="name" placeholder="John Doe" required pattern="[A-Za-z\s]{3,}">
+                            </div>
+                            
+                            <div class="booking__group">
+                                <label class="booking__label" for="phone">Phone</label>
+                                <input class="booking__input" type="tel" id="phone" name="phone" placeholder="0812-3456-7890" required pattern="[0-9\-+]{10,15}">
+                            </div>
+                        </div>
+
+                        <div class="booking__row">
+                            <div class="booking__group">
+                                <label class="booking__label" for="email">Email Address</label>
+                                <input class="booking__input" type="email" id="email" name="email" placeholder="username@gmail.com" required>
+                            </div>
+
+                            <div class="booking__group">
+                                <label class="booking__label" for="service">Service</label>
+                                <select class="booking__input booking__select" id="service" name="service" required>
+                                    <option value="" disabled selected>Select a service</option>
+                                    <option value="classic">Classic Cut</option>
+                                    <option value="junior">Junior Cut</option>
+                                    <option value="color">Color Refresh</option>
+                                    <option value="scalp">Scalp Treatment</option>
+                                    <option value="shave">Hot Towel Shave</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="booking__row">
+                            <div class="booking__group">
+                                <label class="booking__label" for="date">Date</label>
+                                <input class="booking__input" type="date" id="date" name="date" required>
+                            </div>
+                            
+                            <div class="booking__group">
+                                <label class="booking__label" for="time">Time</label>
+                                <input class="booking__input" type="time" id="time" name="time" required>
+                            </div>
+                        </div>
+
+                        <div class="booking__group">
+                            <label class="booking__label" for="note">Note (Optional)</label>
+                            <textarea class="booking__input booking__textarea" id="note" name="note" placeholder="Any special requests?"></textarea>
+                        </div>
+
+                        <button class="booking__submit btn-primary" type="submit">
+                            Book Now <i data-feather="check-circle"></i>
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
-
-        <!-- Booking Form -->
-        <form class="booking-form">
-            <!-- Full Name -->
-            <div class="booking-form-group">
-                <label for="name">Full Name</label>
-                <input type="text" id="name" name="name" placeholder="John Doe" required>
-            </div>
-
-            <!-- Phone -->
-            <div class="booking-form-group">
-                <label for="phone">Phone</label>
-                <input type="tel" id="phone" name="phone" placeholder="0812-3456-7890" required>
-            </div>
-
-            <!-- Email -->
-            <div class="booking-form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" placeholder="username@gmail.com" required>
-            </div>
-
-            <!-- Service -->
-            <div class="booking-form-group">
-                <label for="service">Service</label>
-                <select id="service" name="service" required>
-                    <option value="">Select a service</option>
-                    <option value="classic">Classic Cut</option>
-                    <option value="junior">Junior Cut</option>
-                    <option value="color">Color Refresh</option>
-                    <option value="scalp">Scalp Treatment</option>
-                    <option value="shave">Hot Towel Shave</option>
-                </select>
-            </div>
-
-            <!-- Date -->
-            <div class="booking-form-group">
-                <label for="date">Date</label>
-                <input type="date" id="date" name="date" required>
-            </div>
-            
-            <!-- Time -->
-            <div class="booking-form-group">
-                <label for="time">Time</label>
-                <input type="time" id="time" name="time" required>
-            </div>
-
-            <!-- Note -->
-            <div class="booking-form-group">
-                <label for="message">Note</label>
-                <textarea id="note" name="note" required></textarea>
-            </div>
-
-            <!-- Submit Button -->
-            <button type="submit">Book Now</button>
-        </form>
     </section>
+
+    <!-- Success Popup Modal -->
+    <div class="modal" id="success-modal" aria-hidden="true">
+        <div class="modal__overlay" id="modal-overlay"></div>
+        <div class="modal__content">
+            <div class="modal__icon-wrapper">
+                <i data-feather="check" class="modal__icon"></i>
+            </div>
+            <h3 class="modal__title">Booking Confirmed!</h3>
+            <p class="modal__desc">Thank you for booking with Barber'O. We've received your request and will contact you shortly.</p>
+            <a href="#home" class="modal__close btn-primary" id="modal-close-btn">Back to Home</a>
+        </div>
+    </div>
 
     <!-- Icons -->
      <script>
