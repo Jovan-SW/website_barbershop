@@ -129,6 +129,33 @@ body {
     stroke-width: 2;
 }
 
+.navbar-extra a.navbar-login-btn {
+    background-color: var(--accent-color);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 22.5px 45px;
+    border-radius: 25px;
+    font-weight: 600;
+    gap: 0.5rem;
+    font-size: 1.2rem;
+    border: 1px solid transparent;
+}
+
+.navbar-extra a.navbar-login-btn:hover {
+    background-color: transparent;
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+}
+
+.navbar-extra a.navbar-login-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
 #hamburger-menu {
     display: none; /* Hidden on desktop */
 }
@@ -141,6 +168,15 @@ body {
 
     #hamburger-menu {
         display: inline-block; /* Show on tablet/mobile */
+    }
+
+    .navbar-extra a.navbar-login-btn span {
+        display: none; /* Hide text on mobile to save space */
+    }
+
+    .navbar-extra a.navbar-login-btn {
+        padding: 0.6rem;
+        border-radius: 50%; /* Circle shape on mobile */
     }
 
     .navbar-nav {

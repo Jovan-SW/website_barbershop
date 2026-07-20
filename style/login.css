@@ -1,0 +1,459 @@
+/* ==========================================================================
+   CSS Variables & Theme (Modern Dark Luxury)
+   ========================================================================== */
+:root {
+  /* Colors */
+  --bg-color: #0b0d10;
+  --card-bg: rgba(18, 20, 24, 0.65);
+  --card-border: rgba(255, 255, 255, 0.06);
+  --text-primary: #f8f9fa;
+  --text-secondary: #949aa5;
+  --accent-color: #d4af37; /* Luxury Gold */
+  --accent-hover: #e8c653;
+  --input-bg: rgba(0, 0, 0, 0.25);
+  --input-border: rgba(255, 255, 255, 0.08);
+  --input-focus: rgba(212, 175, 55, 0.4);
+  
+  /* Status Colors */
+  --error-color: #ef4444;
+  --success-color: #22c55e;
+  
+  /* Typography */
+  --font-primary: 'Roboto', system-ui, sans-serif;
+  --font-heading: 'Oswald', sans-serif;
+  
+  /* Spacing */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  
+  /* Transitions & Shadows */
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow-card: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  --shadow-glow: 0 0 20px rgba(212, 175, 55, 0.2);
+}
+
+/* ==========================================================================
+   Reset & Base Styles
+   ========================================================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-primary);
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Elegant ambient background light */
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(212, 175, 55, 0.04), transparent 30%),
+    radial-gradient(circle at 85% 30%, rgba(212, 175, 55, 0.05), transparent 30%);
+  position: relative;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Background Decorative Elements */
+body::before, body::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  z-index: -1;
+}
+
+body::before {
+  width: 300px;
+  height: 300px;
+  background: rgba(212, 175, 55, 0.06);
+  top: -10%;
+  left: -5%;
+}
+
+body::after {
+  width: 400px;
+  height: 400px;
+  background: rgba(255, 255, 255, 0.02);
+  bottom: -15%;
+  right: -5%;
+}
+
+/* ==========================================================================
+   Login Container & Card (Glassmorphism)
+   ========================================================================== */
+.login__container {
+  width: 100%;
+  max-width: 440px;
+  padding: var(--spacing-lg);
+  z-index: 1;
+}
+
+.login__card {
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-card);
+  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ==========================================================================
+   Header & Typography
+   ========================================================================== */
+.login__header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.login__header h2 {
+  font-family: var(--font-heading);
+  font-size: 2.25rem;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent-color);
+  margin-bottom: var(--spacing-xs);
+}
+
+.login__header p {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   Form Elements
+   ========================================================================== */
+.login__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.login__form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+
+.login__form-group label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+  transition: color var(--transition-fast);
+}
+
+.login__input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.login__form-group input:not([type="checkbox"]) {
+  width: 100%;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: all var(--transition-normal);
+  outline: none;
+}
+
+.login__form-group input:not([type="checkbox"])::placeholder {
+  color: rgba(148, 154, 165, 0.4);
+}
+
+/* Focus State */
+.login__form-group input:not([type="checkbox"]):focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 4px var(--input-focus);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.login__form-group input:not([type="checkbox"]):focus + label,
+.login__form-group input:not([type="checkbox"]):focus ~ label {
+  color: var(--accent-color);
+}
+
+/* Password Toggle Icon */
+.login__password-toggle {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+  background: none;
+  border: none;
+  padding: 4px;
+}
+
+.login__password-toggle:hover {
+  color: var(--text-primary);
+}
+
+/* ==========================================================================
+   Form Utilities (Remember Me & Forgot Password)
+   ========================================================================== */
+.login__options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  margin-top: -8px;
+}
+
+.login__remember {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.login__remember:hover {
+  color: var(--text-primary);
+}
+
+.login__remember input[type="checkbox"] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  background: var(--input-bg);
+  cursor: pointer;
+  position: relative;
+  transition: all var(--transition-fast);
+}
+
+.login__remember input[type="checkbox"]:checked {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.login__remember input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid #000;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.login__forgot {
+  color: var(--accent-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.login__forgot:hover {
+  color: var(--accent-hover);
+}
+
+/* ==========================================================================
+   Buttons & States
+   ========================================================================== */
+.login__btn {
+  background: var(--accent-color);
+  color: #000;
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 15px;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: var(--spacing-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.login__btn:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow);
+}
+
+.login__btn:active {
+  transform: translateY(0);
+}
+
+/* Button Loading State */
+.login__btn.is-loading {
+  color: transparent;
+  pointer-events: none;
+}
+
+.login__btn.is-loading::after {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 3px solid rgba(0, 0, 0, 0.2);
+  border-top-color: #000;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* ==========================================================================
+   Divider (ATAU)
+   ========================================================================== */
+.login__divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  margin: var(--spacing-lg) 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.login__divider::before,
+.login__divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--input-border);
+}
+
+.login__divider::before { margin-right: 15px; }
+.login__divider::after { margin-left: 15px; }
+
+/* ==========================================================================
+   Social Login
+   ========================================================================== */
+.login__social {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+.login__social-btn {
+  background: transparent;
+  border: 1px solid var(--input-border);
+  color: var(--text-primary);
+  padding: 12px;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.login__social-btn:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* ==========================================================================
+   Validation States (Error & Success)
+   ========================================================================== */
+.login__form-group.has-error input:not([type="checkbox"]) {
+  border-color: var(--error-color);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.login__form-group.has-error input:not([type="checkbox"]):focus {
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2);
+}
+
+.login__error-text {
+  display: none;
+  color: var(--error-color);
+  font-size: 0.8rem;
+  margin-top: 4px;
+}
+
+.login__form-group.has-error .login__error-text {
+  display: block;
+}
+
+.login__form-group.has-success input:not([type="checkbox"]) {
+  border-color: var(--success-color);
+}
+
+.login__form-group.has-success input:not([type="checkbox"]):focus {
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2);
+}
+
+/* ==========================================================================
+   Animations
+   ========================================================================== */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+@media screen and (max-width: 480px) {
+  .login__container {
+    padding: var(--spacing-md);
+  }
+  
+  .login__card {
+    padding: var(--spacing-lg);
+  }
+
+  .login__header h2 {
+    font-size: 2rem;
+  }
+  
+  .login__social {
+    grid-template-columns: 1fr;
+  }
+  
+  .login__options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
