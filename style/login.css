@@ -328,9 +328,7 @@ body::after {
   animation: spin 0.8s linear infinite;
 }
 
-/* ==========================================================================
-   Divider (ATAU)
-   ========================================================================== */
+/* Divider */
 .login__divider {
   display: flex;
   align-items: center;
