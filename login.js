@@ -43,7 +43,14 @@ const LoginController = (() => {
         elements.form.addEventListener('submit', handleSubmit);
     };
 
-    
+    /**
+     * Checks if a session already exists and redirects if true
+     */
+    const checkActiveSession = () => {
+        if (localStorage.getItem('auth_session')) {
+            window.location.replace('index.html');
+        }
+    };
 
     /*
      Loads remembered email from LocalStorage
@@ -223,7 +230,7 @@ const LoginController = (() => {
         // Redirect to dashboard/home
         setTimeout(() => {
             window.location.replace('index.html');
-        }, 500);
+        }, 1500);
     };
 
     /**
