@@ -1,4 +1,4 @@
-/* INTRO PRELOADER — Lifecycle Controller */
+// INTRO PRELOADER — Lifecycle Controller //
 document.addEventListener('DOMContentLoaded', function () {
     const overlay = document.getElementById('intro-overlay');
 
@@ -71,7 +71,7 @@ document.addEventListener('click', function (e) {
     });
 })();
 
-/* BOOKING FORM & POPUP LOGIC */
+// BOOKING FORM & POPUP LOGIC //
 const bookingForm = document.getElementById('booking-form');
 const successModal = document.getElementById('success-modal');
 const modalCloseBtn = document.getElementById('modal-close-btn');
@@ -99,3 +99,28 @@ if (bookingForm && successModal) {
     modalCloseBtn.addEventListener('click', closeModal);
     modalOverlay.addEventListener('click', closeModal);
 }
+
+// Authentication State Synchronization & Logout Handler
+document.addEventListener('DOMContentLoaded', () => {
+    const session = localStorage.getItem('auth_session');
+    const loginBtn = document.querySelector('.navbar-login-btn');
+    const logoutBtn = document.getElementById('logoutBtn') || document.getElementById('LogoutBtn');
+
+    // UI State Toggling
+    if (session) {
+        if (loginBtn) loginBtn.style.display = 'none';
+        if (logoutBtn) logoutBtn.style.display = 'inline-block';
+    } else {
+        if (loginBtn) loginBtn.style.display = 'inline-block';
+        if (logoutBtn) logoutBtn.style.display = 'none';
+    }
+
+    // Logout Action Handler
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('auth_session');
+            window.location.reload();
+        });
+    }
+});

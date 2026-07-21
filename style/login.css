@@ -1,6 +1,4 @@
-/* ==========================================================================
-   CSS Variables & Theme (Modern Dark Luxury)
-   ========================================================================== */
+/* CSS Variables & Theme (Modern Dark Luxury) */
 :root {
   /* Colors */
   --bg-color: #0b0d10;
@@ -454,4 +452,9 @@ body::after {
     align-items: flex-start;
     gap: 12px;
   }
+}
+
+/* Logout styling */
+.navbar-logout-btn {
+  
 }

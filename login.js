@@ -34,7 +34,7 @@ const LoginController = (() => {
     };
 
     /**
-     * Attaches all DOM event listeners
+      Attaches all DOM event listeners
      */
     const attachEventListeners = () => {
         elements.email.addEventListener('input', handleInput);
@@ -43,19 +43,10 @@ const LoginController = (() => {
         elements.form.addEventListener('submit', handleSubmit);
     };
 
-    /**
-     * Checks if user is already logged in
-     */
-    const checkActiveSession = () => {
-        const session = localStorage.getItem('auth_session');
-        // If session exists and we are on the login page, redirect to index
-        if (session && window.location.pathname.includes('login.html')) {
-            window.location.replace('index.html');
-        }
-    };
+    
 
-    /**
-     * Loads remembered email from LocalStorage
+    /*
+     Loads remembered email from LocalStorage
      */
     const loadRememberedEmail = () => {
         const savedEmail = localStorage.getItem('remembered_email');
