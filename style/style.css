@@ -1,4 +1,5 @@
 :root {
+    color-scheme: dark;
     --primary: #1a1a1a;
     --background: #121212;
     --accent-color: #d4af37;
@@ -124,89 +125,352 @@ body {
 }
 
 
+/* ==========================================================================
+   Navbar Authentication Buttons (Login & Logout)
+   ========================================================================== */
 .navbar-extra a.navbar-login-btn {
-    background-color: var(--accent-color);
-    color: var(--primary);
+    position: relative;
+    overflow: hidden;
+    background: rgba(18, 18, 18, 0.7);
+    border: 1.5px solid rgba(212, 175, 55, 0.45);
     display: inline-flex;
-    flex-direction: row;
     align-items: center;
     justify-content: center;
-    padding: 0.6rem 1.4rem;
-    border-radius: 25px;
+    padding: 0.65rem 1.45rem;
+    border-radius: 30px;
     font-weight: 600;
-    gap: 0.5rem;
     font-size: 1.05rem;
     line-height: 1;
-    border: 1px solid transparent;
-    transition: all 0.3s ease-in-out;
     text-decoration: none;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
 }
 
-.navbar-extra a.navbar-login-btn i,
-.navbar-extra a.navbar-login-btn svg {
-    width: 20px;
-    height: 20px;
+/* Background Gold Fill Animation */
+.navbar-extra a.navbar-login-btn .btn-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(135deg, #d4af37 0%, #fae58d 50%, #d4af37 100%);
+    border-radius: 30px;
+    transition: width 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 1;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
+}
+
+/* Traveling Scissor Cut Effect */
+.navbar-extra a.navbar-login-btn .btn-scissor {
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    color: #0b0d10;
+    opacity: 0;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: left 0.45s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s ease;
+}
+
+.navbar-extra a.navbar-login-btn .btn-scissor i,
+.navbar-extra a.navbar-login-btn .btn-scissor svg {
+    width: 17px;
+    height: 17px;
+    color: #0b0d10;
+    filter: drop-shadow(0 0 3px rgba(212, 175, 55, 0.8));
+    display: inline-block;
+}
+
+/* Button Content (User Icon + Text) */
+.navbar-extra a.navbar-login-btn .btn-content {
+    position: relative;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--accent-color);
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: color 0.35s ease, transform 0.35s ease;
+}
+
+.navbar-extra a.navbar-login-btn .btn-content i,
+.navbar-extra a.navbar-login-btn .btn-content svg {
+    width: 18px;
+    height: 18px;
     display: inline-block;
     vertical-align: middle;
     flex-shrink: 0;
+    transition: transform 0.35s ease;
 }
 
+/* Login Button Hover State */
 .navbar-extra a.navbar-login-btn:hover {
-    background-color: transparent;
-    color: var(--accent-color);
     border-color: var(--accent-color);
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.25);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
 }
 
+.navbar-extra a.navbar-login-btn:hover .btn-fill {
+    width: 100%;
+}
+
+.navbar-extra a.navbar-login-btn:hover .btn-scissor {
+    opacity: 1;
+    left: 100%;
+}
+
+.navbar-extra a.navbar-login-btn:hover .btn-scissor svg {
+    animation: scissorCut 0.22s ease-in-out infinite alternate;
+}
+
+.navbar-extra a.navbar-login-btn:hover .btn-content {
+    color: #0b0d10;
+    font-weight: 700;
+}
+
+.navbar-extra a.navbar-login-btn:hover .btn-content svg {
+    transform: scale(1.1);
+}
+
+.navbar-extra a.navbar-login-btn:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* Scissor Snip Animation */
+@keyframes scissorCut {
+    0% {
+        transform: rotate(-20deg) scale(1);
+    }
+    100% {
+        transform: rotate(20deg) scale(1.15);
+    }
+}
+
+/* ==========================================================================
+   User Profile Avatar & Hover Dropdown
+   ========================================================================== */
+.navbar-user-profile {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Invisible hover bridge between avatar and dropdown */
+.navbar-user-profile::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 16px;
+}
+
+/* Circular Initial Avatar */
+.profile-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #2a2514, #121212);
+    border: 2px solid var(--accent-color);
+    color: var(--accent-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.45), 0 0 10px rgba(212, 175, 55, 0.2);
+}
+
+.profile-avatar .avatar-initial {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    pointer-events: none;
+}
+
+.navbar-user-profile:hover .profile-avatar,
+.profile-avatar:focus-visible {
+    transform: scale(1.08);
+    border-color: #fae58d;
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.45), 0 0 15px rgba(212, 175, 55, 0.3);
+}
+
+/* Hover Dropdown Menu */
+.profile-dropdown {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    min-width: 200px;
+    background: rgba(18, 20, 24, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.65), 0 0 20px rgba(212, 175, 55, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-8px) scale(0.96);
+    transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.25s;
+    z-index: 1000;
+}
+
+.navbar-user-profile:hover .profile-dropdown,
+.navbar-user-profile:focus-within .profile-dropdown,
+.profile-dropdown.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+}
+
+/* Dropdown Header & Email Info */
+.dropdown-header {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dropdown-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+}
+
+.dropdown-email {
+    font-size: 0.88rem;
+    color: var(--text-main);
+    font-weight: 500;
+    word-break: break-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 175px;
+}
+
+/* Adjust Logout Button inside Dropdown */
+.profile-dropdown .navbar-logout-btn {
+    width: 100%;
+    padding: 0.65rem 1rem;
+    justify-content: center;
+}
+
+/* ==========================================================================
+   Logout Button (Polished Dark Velvet Luxury)
+   ========================================================================== */
 .navbar-extra .navbar-logout-btn,
 .navbar-extra button.navbar-logout-btn,
 .navbar-extra a.navbar-logout-btn {
-    background: transparent;
-    background-color: transparent;
-    border: none;
+    position: relative;
+    overflow: hidden;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1.5px solid rgba(239, 68, 68, 0.35);
     outline: none;
-    color: #ff4d4d;
     display: inline-flex;
-    flex-direction: row;
     align-items: center;
     justify-content: center;
-    padding: 0.6rem 1.2rem;
+    padding: 0.65rem 1.45rem;
+    border-radius: 30px;
     cursor: pointer;
     font-weight: 600;
     font-size: 1.05rem;
-    font-family: inherit;
-    gap: 0.5rem;
+    font-family: var(--font-heading);
+    letter-spacing: 1px;
+    text-transform: uppercase;
     line-height: 1;
-    border-radius: 25px;
-    transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
     text-decoration: none;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+}
+
+/* Glow / Fluid Red Fill on Hover */
+.navbar-extra .navbar-logout-btn .logout-glow,
+.navbar-extra button.navbar-logout-btn .logout-glow {
+    position: absolute;
+    inset: 0;
+    border-radius: 30px;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.95), rgba(185, 28, 28, 0.98));
+    opacity: 0;
+    transform: scale(0.85);
+    transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 1;
+}
+
+/* Content inside Logout Button */
+.navbar-extra .navbar-logout-btn .btn-content,
+.navbar-extra button.navbar-logout-btn .btn-content {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #fca5a5;
+    transition: color 0.35s ease;
 }
 
 .navbar-extra .navbar-logout-btn i,
 .navbar-extra .navbar-logout-btn svg,
 .navbar-extra button.navbar-logout-btn i,
 .navbar-extra button.navbar-logout-btn svg {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     display: inline-block;
     vertical-align: middle;
     flex-shrink: 0;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+/* Logout Button Hover State */
 .navbar-extra .navbar-logout-btn:hover,
-.navbar-extra button.navbar-logout-btn:hover,
-.navbar-extra a.navbar-logout-btn:hover {
-    background: transparent;
-    background-color: transparent;
-    border: none;
-    color: #ff1a1a;
+.navbar-extra button.navbar-logout-btn:hover {
+    border-color: rgba(239, 68, 68, 0.85);
     transform: translateY(-2px);
-    text-shadow: 
-        0 0 5px #ff4d4d,
-        0 0 10px #ff4d4d,
-        0 0 20px #ff0000,
-        0 0 35px #ff0000;
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4), 0 0 15px rgba(239, 68, 68, 0.25);
+}
+
+.navbar-extra .navbar-logout-btn:hover .logout-glow,
+.navbar-extra button.navbar-logout-btn:hover .logout-glow {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.navbar-extra .navbar-logout-btn:hover .btn-content,
+.navbar-extra button.navbar-logout-btn:hover .btn-content {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.navbar-extra .navbar-logout-btn:hover svg,
+.navbar-extra button.navbar-logout-btn:hover svg {
+    transform: translateX(4px);
+}
+
+.navbar-extra .navbar-logout-btn:active,
+.navbar-extra button.navbar-logout-btn:active {
+    transform: translateY(0) scale(0.98);
 }
 
 
@@ -232,24 +496,44 @@ body {
         padding: 0.5rem 1rem;
         font-size: 0.95rem;
         border-radius: 20px;
-        gap: 0.4rem;
     }
 
-    .navbar-extra a.navbar-login-btn span {
-        display: inline-block;
+    .navbar-extra a.navbar-login-btn .btn-content {
+        font-size: 0.92rem;
+        gap: 0.35rem;
     }
 
     .navbar-extra .navbar-logout-btn,
     .navbar-extra button.navbar-logout-btn {
-        padding: 0.5rem 0.8rem;
-        font-size: 0.95rem;
-        gap: 0.4rem;
+        padding: 0.5rem 0.95rem;
+        font-size: 0.92rem;
+        border-radius: 20px;
+    }
+
+    .navbar-extra .navbar-logout-btn .btn-content,
+    .navbar-extra button.navbar-logout-btn .btn-content {
+        font-size: 0.92rem;
+        gap: 0.35rem;
     }
 
     .navbar-extra a.navbar-login-btn svg,
     .navbar-extra button.navbar-logout-btn svg {
-        width: 18px;
-        height: 18px;
+        width: 16px;
+        height: 16px;
+    }
+
+    .profile-avatar {
+        width: 38px;
+        height: 38px;
+    }
+
+    .profile-avatar .avatar-initial {
+        font-size: 1.15rem;
+    }
+
+    .profile-dropdown {
+        right: -5px;
+        min-width: 185px;
     }
 
     .navbar-nav {
@@ -936,22 +1220,37 @@ body {
     }
 }
 
-/* BOOKING SECTION */
+/* BOOKING SECTION (Pure CSS Luxury Dark Background - Zero Image Files) */
 .booking {
     padding: 7rem 7% 8rem;
     position: relative;
     z-index: 1;
+    overflow: hidden;
+    background-color: #07090b;
     background-image:
-        linear-gradient(
-            to bottom,
-            rgba(18, 18, 18, 0.97) 0%,
-            rgba(18, 18, 18, 0.85) 50%,
-            rgba(18, 18, 18, 0.97) 100%
-        ),
-        url('/Img/hero_image.jpeg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+        radial-gradient(ellipse at 50% 25%, rgba(212, 175, 55, 0.15) 0%, transparent 60%),
+        radial-gradient(circle at 10% 80%, rgba(212, 175, 55, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 90% 70%, rgba(212, 175, 55, 0.05) 0%, transparent 40%),
+        radial-gradient(rgba(212, 175, 55, 0.16) 1px, transparent 1px),
+        linear-gradient(180deg, #07090b 0%, #111419 50%, #060709 100%);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 34px 34px, 100% 100%;
+    background-position: center, center, center, 0 0, center;
+}
+
+/* Gold Ambient Spotlight in Background */
+.booking::after {
+    content: '';
+    position: absolute;
+    width: 650px;
+    height: 650px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    filter: blur(50px);
+    z-index: 0;
 }
 
 .booking::before {
@@ -961,7 +1260,8 @@ body {
     left: 7%;
     right: 7%;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.4), transparent);
+    z-index: 2;
 }
 
 .booking__container {
@@ -970,6 +1270,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
+    z-index: 2;
 }
 
 .booking__header {
@@ -999,30 +1301,220 @@ body {
     display: flex;
     justify-content: center;
     perspective: 1000px;
+    position: relative;
 }
 
-/* Paper Concept */
+/* ==========================================================================
+   Barber Tools Perimeter Badges & Hover Animations
+   ========================================================================== */
+.booking__decorations {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.tool-badge {
+    position: absolute;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: rgba(18, 20, 24, 0.92);
+    border: 2px solid rgba(212, 175, 55, 0.45);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.55), 0 0 15px rgba(212, 175, 55, 0.18);
+    cursor: pointer;
+    pointer-events: auto;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: gentleFloat 4s ease-in-out infinite;
+}
+
+.tool-badge .tool-svg {
+    width: 32px;
+    height: 32px;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+/* Positions around the paper perimeter */
+.tool--scissors {
+    top: -22px;
+    left: calc(50% - 430px);
+    animation-delay: 0s;
+}
+
+.tool--clipper {
+    top: -22px;
+    right: calc(50% - 430px);
+    animation-delay: 0.8s;
+}
+
+.tool--spray {
+    top: 45%;
+    left: calc(50% - 445px);
+    animation-delay: 1.6s;
+}
+
+.tool--pole {
+    top: 45%;
+    right: calc(50% - 445px);
+    animation-delay: 2.4s;
+}
+
+.tool--razor {
+    bottom: -22px;
+    left: calc(50% - 430px);
+    animation-delay: 1.2s;
+}
+
+.tool--comb {
+    bottom: -22px;
+    right: calc(50% - 430px);
+    animation-delay: 2.0s;
+}
+
+/* Tool Hover Effects */
+.tool-badge:hover {
+    transform: scale(1.22);
+    border-color: var(--accent-color);
+    box-shadow: 0 14px 30px rgba(212, 175, 55, 0.5), 0 0 25px rgba(212, 175, 55, 0.45);
+    z-index: 20;
+}
+
+/* 1. Scissors Animation */
+.tool--scissors:hover .scissor-blade-1 {
+    animation: snipBlade1 0.22s ease-in-out infinite alternate;
+}
+
+.tool--scissors:hover .scissor-blade-2 {
+    animation: snipBlade2 0.22s ease-in-out infinite alternate;
+}
+
+@keyframes snipBlade1 {
+    0% { transform: rotate(0deg); transform-origin: 17px 16px; }
+    100% { transform: rotate(-24deg); transform-origin: 17px 16px; }
+}
+
+@keyframes snipBlade2 {
+    0% { transform: rotate(0deg); transform-origin: 17px 16px; }
+    100% { transform: rotate(24deg); transform-origin: 17px 16px; }
+}
+
+/* 2. Clipper Animation (Rapid Buzz Vibration) */
+.tool--clipper:hover {
+    animation: buzzClipper 0.07s infinite alternate ease-in-out;
+}
+
+@keyframes buzzClipper {
+    0% { transform: scale(1.22) translate(-2px, -1px) rotate(-2deg); }
+    100% { transform: scale(1.22) translate(2px, 1px) rotate(2deg); }
+}
+
+/* 3. Razor Animation (Blade Slice/Swing) */
+.tool--razor:hover .razor-blade {
+    animation: sliceRazor 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes sliceRazor {
+    0% { transform: rotate(0deg); transform-origin: 22px 14px; }
+    100% { transform: rotate(-45deg); transform-origin: 22px 14px; }
+}
+
+/* 4. Comb Animation (Styling Wave) */
+.tool--comb:hover .tool-svg {
+    animation: combWave 0.35s ease-in-out infinite alternate;
+}
+
+@keyframes combWave {
+    0% { transform: rotate(-14deg) translateY(0); }
+    100% { transform: rotate(14deg) translateY(4px); }
+}
+
+/* 5. Spray Animation (Trigger Puff & Water Drops) */
+.tool--spray:hover .tool-svg {
+    animation: sprayShake 0.4s ease-in-out infinite;
+}
+
+.tool--spray:hover .spray-drop {
+    animation: puffDrop 0.4s ease-out infinite;
+}
+
+@keyframes sprayShake {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(-16deg) scale(1.1); }
+}
+
+@keyframes puffDrop {
+    0% { opacity: 0; transform: translate(0, 0) scale(0.4); }
+    50% { opacity: 1; }
+    100% { opacity: 0; transform: translate(-8px, -4px) scale(1.5); }
+}
+
+/* 6. Barber Pole Animation (Spins with 3D illusion) */
+.tool--pole:hover .tool-svg {
+    animation: spinPole 0.75s linear infinite;
+}
+
+@keyframes spinPole {
+    0% { transform: scale(1.15) rotate(0deg); }
+    100% { transform: scale(1.15) rotate(360deg); }
+}
+
+/* Idle Gentle Float Animation */
+@keyframes gentleFloat {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-8px) rotate(3deg);
+    }
+}
+
+/* ==========================================================================
+   Booking Card (Pure CSS Luxury Dark Glassmorphism)
+   ========================================================================== */
 .booking__paper {
-    background: url('/Img/booking_paper.jpeg') center/100% 100% no-repeat;
+    background: linear-gradient(160deg, rgba(22, 25, 32, 0.9) 0%, rgba(13, 15, 19, 0.95) 100%);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border: 1px solid rgba(212, 175, 55, 0.32);
+    border-radius: 24px;
     padding: 4rem;
-    border-radius: 4px;
     width: 100%;
-    max-width: 800px;
+    max-width: 820px;
     box-shadow: 
-        0 30px 60px rgba(0, 0, 0, 0.6),
-        inset 0 0 40px rgba(212, 175, 55, 0.1);
+        0 30px 70px -15px rgba(0, 0, 0, 0.85),
+        0 0 40px rgba(212, 175, 55, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
     position: relative;
-    /* Adding some paper-like transform and rotation for unique feel */
-    transform: rotateX(2deg) rotateY(0deg) scale(1);
-    transition: transform 0.5s ease;
-    color: #1a1a1a; 
+    transform: rotateX(2deg) scale(1);
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s ease, border-color 0.45s ease;
+    color: var(--text-main);
+}
+
+/* Subtle gold top-edge light beam */
+.booking__paper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 15%;
+    right: 15%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.7), transparent);
+    border-radius: 24px 24px 0 0;
 }
 
 .booking__paper:hover {
-    transform: rotateX(0) scale(1.02);
+    transform: rotateX(0deg) translateY(-3px) scale(1.01);
+    border-color: rgba(212, 175, 55, 0.55);
     box-shadow: 
-        0 40px 80px rgba(0, 0, 0, 0.8),
-        inset 0 0 50px rgba(212, 175, 55, 0.15);
+        0 40px 90px -15px rgba(0, 0, 0, 0.95),
+        0 0 50px rgba(212, 175, 55, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 .booking__form-header {
@@ -1035,15 +1527,15 @@ body {
     font-size: 2.2rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: #cfcdcd; /* Dark text for paper */
+    letter-spacing: 2px;
+    color: #f5f5f7;
     margin-bottom: 0.5rem;
 }
 
 .booking__form-header p {
-    color: #cbc9c9c8; /* Dark text for paper */
+    color: var(--text-muted);
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 400;
 }
 
 .booking__form {
@@ -1066,45 +1558,81 @@ body {
 
 .booking__label {
     font-family: var(--font-heading);
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: #e4e3e3f4;
+    color: #dedede;
 }
 
-/* Stylish Input Fields */
+/* Pure CSS Luxury Form Inputs */
 .booking__input {
     padding: 1rem 1.2rem;
-    background: #dcdcdc;
-    border: 1px solid black;
-    border-radius: 4px;
+    background: rgba(8, 10, 13, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
     font-family: var(--font-body);
     font-size: 1rem;
-    color: #111;
+    color: #f5f5f7;
     transition: all 0.3s ease;
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
+    outline: none;
+    color-scheme: dark;
 }
 
 .booking__input::placeholder {
-    color: rgba(0, 0, 0, 0.5);
+    color: rgba(255, 255, 255, 0.35);
 }
 
 .booking__input:focus {
-    background: rgba(255, 255, 255, 0.97);
-    border-color: #fff704;
-    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.3);
+    background: rgba(0, 0, 0, 0.85);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.28);
     outline: none;
+}
+
+/* Prevent Browser Autofill from turning inputs white / light */
+.booking__input:-webkit-autofill,
+.booking__input:-webkit-autofill:hover,
+.booking__input:-webkit-autofill:focus,
+.booking__input:-webkit-autofill:active,
+.booking__input:autofill {
+    -webkit-box-shadow: 0 0 0 1000px #0b0d10 inset !important;
+    box-shadow: 0 0 0 1000px #0b0d10 inset !important;
+    -webkit-text-fill-color: #f5f5f7 !important;
+    caret-color: #f5f5f7 !important;
+    color: #f5f5f7 !important;
+    border-color: rgba(255, 255, 255, 0.25) !important;
+    transition: background-color 50000s ease-in-out 0s !important;
+}
+
+.booking__input:-webkit-autofill:focus,
+.booking__input:autofill:focus {
+    border-color: var(--accent-color) !important;
+    -webkit-box-shadow: 0 0 0 1000px #0b0d10 inset, 0 0 0 3px rgba(212, 175, 55, 0.28) !important;
+    box-shadow: 0 0 0 1000px #0b0d10 inset, 0 0 0 3px rgba(212, 175, 55, 0.28) !important;
+}
+
+.booking__input.is-invalid:-webkit-autofill,
+.booking__input.is-invalid:autofill {
+    border-color: #ef4444 !important;
+    -webkit-box-shadow: 0 0 0 1000px #0b0d10 inset, 0 0 0 2px rgba(239, 68, 68, 0.3) !important;
+    box-shadow: 0 0 0 1000px #0b0d10 inset, 0 0 0 2px rgba(239, 68, 68, 0.3) !important;
 }
 
 .booking__select {
     cursor: pointer;
     appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23111' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4af37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     background-repeat: no-repeat;
     background-position: right 1.2rem center;
     background-size: 1em;
+}
+
+.booking__select option {
+    background: #14161a;
+    color: #f5f5f7;
 }
 
 .booking__textarea {
@@ -1128,6 +1656,127 @@ body {
 .booking__submit i {
     width: 20px;
     height: 20px;
+}
+
+/* Booking Auth Notice */
+.booking__auth-notice {
+    background: rgba(239, 68, 68, 0.12);
+    border: 1.5px solid rgba(239, 68, 68, 0.4);
+    border-radius: 8px;
+    padding: 1.2rem 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+    color: #fca5a5;
+    animation: fadeUp 0.35s ease;
+}
+
+.booking__auth-notice i,
+.booking__auth-notice svg {
+    width: 28px;
+    height: 28px;
+    color: #ef4444;
+    flex-shrink: 0;
+}
+
+.booking__auth-notice-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.booking__auth-notice-text strong {
+    color: #ffffff;
+    font-size: 1.05rem;
+    font-family: var(--font-heading);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.booking__auth-notice-btn {
+    background: var(--accent-color);
+    color: #0b0d10;
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 0.7rem 1.4rem;
+    border-radius: 20px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.35);
+}
+
+.booking__auth-notice-btn:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+}
+
+/* Booking Field Error */
+.booking__field-error {
+    display: none;
+    color: #ef4444;
+    font-size: 0.82rem;
+    font-weight: 500;
+    margin-top: 4px;
+}
+
+.booking__input.is-invalid {
+    border-color: #ef4444 !important;
+    background: rgba(8, 10, 13, 0.65) !important;
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.3) !important;
+}
+
+.booking__input.is-invalid:focus {
+    border-color: #ef4444 !important;
+    background: rgba(0, 0, 0, 0.85) !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.35) !important;
+}
+
+.booking__group.has-error .booking__field-error {
+    display: block;
+}
+
+/* Locked Booking Form (When not logged in) */
+.booking__form.is-locked {
+    position: relative;
+    opacity: 0.6;
+}
+
+.booking__form.is-locked .booking__input {
+    cursor: not-allowed;
+    background: rgba(8, 10, 13, 0.45);
+    border-color: rgba(255, 255, 255, 0.08);
+    color: rgba(245, 245, 247, 0.4);
+}
+
+.booking__form.is-locked .booking__submit {
+    cursor: not-allowed;
+    filter: grayscale(0.5);
+}
+
+/* Readonly Email Input (Locked to Active Account) */
+.booking__input.is-readonly,
+.booking__input#email[readonly] {
+    background: rgba(14, 17, 22, 0.75) !important;
+    cursor: not-allowed !important;
+    color: #f5f5f7 !important;
+    font-weight: 500 !important;
+    border: 1px solid rgba(212, 175, 55, 0.35) !important;
+    user-select: none;
+}
+
+.booking__input.is-readonly:focus,
+.booking__input#email[readonly]:focus {
+    box-shadow: none !important;
+    border-color: rgba(212, 175, 55, 0.5) !important;
 }
 
 /* Modal Popup */
@@ -1234,6 +1883,36 @@ body {
 
     .booking__form-header h3 {
         font-size: 1.8rem;
+    }
+
+    /* Mobile Barber Tools Edge Badges */
+    .tool-badge {
+        width: 46px;
+        height: 46px;
+    }
+    .tool-badge .tool-svg {
+        width: 24px;
+        height: 24px;
+    }
+    .tool--scissors {
+        top: -16px;
+        left: 8px;
+    }
+    .tool--clipper {
+        top: -16px;
+        right: 8px;
+    }
+    .tool--spray,
+    .tool--pole {
+        display: none;
+    }
+    .tool--razor {
+        bottom: -16px;
+        left: 8px;
+    }
+    .tool--comb {
+        bottom: -16px;
+        right: 8px;
     }
 }
 
