@@ -1868,38 +1868,147 @@ body {
 /* Booking Responsive */
 @media (max-width: 768px) {
     .booking {
-        padding: 5rem 5% 6rem;
+        padding: 5rem 4% 6rem;
         background-attachment: scroll;
     }
 
     .booking__paper {
-        padding: 2.5rem 1.5rem;
+        padding: 2.2rem 1.2rem;
     }
 
-    .booking__row {
-        grid-template-columns: 1fr;
-        gap: 1rem;
+    .booking__form-header {
+        margin-bottom: 0.2rem;
     }
 
     .booking__form-header h3 {
-        font-size: 1.8rem;
+        font-size: 1.65rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .booking__form-header p {
+        font-size: 0.88rem;
+    }
+
+    .booking__form {
+        gap: 1rem;
+    }
+
+    /* 2 columns side-by-side on mobile, proportioned & clean */
+    .booking__row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+
+    .booking__group {
+        gap: 0.35rem;
+        min-width: 0;
+    }
+
+    .booking__label {
+        font-size: 0.82rem;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .booking__input {
+        padding: 0.7rem 0.75rem;
+        font-size: 15px;
+        border-radius: 6px;
+        min-width: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .booking__select {
+        background-position: right 0.55rem center;
+        background-size: 0.85em;
+        padding-right: 1.6rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .booking__field-error {
+        font-size: 0.72rem;
+        line-height: 1.25;
+        margin-top: 2px;
+    }
+
+    .booking__textarea {
+        min-height: 80px;
+        padding: 0.75rem;
+        font-size: 15px;
+    }
+
+    .booking__submit {
+        padding: 0.9rem 1.2rem;
+        font-size: 1rem;
+        margin-top: 0.5rem;
+    }
+
+    /* Mobile Booking Auth Notice */
+    .booking__auth-notice {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+        padding: 1.4rem 1.1rem;
+        gap: 0.9rem;
+    }
+
+    .booking__auth-notice i,
+    .booking__auth-notice svg {
+        margin-bottom: 2px;
+        width: 30px;
+        height: 30px;
+    }
+
+    .booking__auth-notice-text {
+        align-items: center;
+        text-align: center;
+    }
+
+    .booking__auth-notice-text strong {
+        font-size: 1rem;
+        margin-bottom: 4px;
+        text-align: center;
+    }
+
+    .booking__auth-notice-text span {
+        font-size: 0.88rem;
+        line-height: 1.45;
+        text-align: center;
+        max-width: 360px;
+    }
+
+    .booking__auth-notice-btn {
+        width: 100%;
+        max-width: 220px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.7rem 1.4rem;
+        text-align: center;
+        margin-top: 2px;
+        font-size: 0.9rem;
     }
 
     /* Mobile Barber Tools Edge Badges */
     .tool-badge {
-        width: 46px;
-        height: 46px;
+        width: 44px;
+        height: 44px;
     }
     .tool-badge .tool-svg {
-        width: 24px;
-        height: 24px;
+        width: 22px;
+        height: 22px;
     }
     .tool--scissors {
-        top: -16px;
+        top: -15px;
         left: 8px;
     }
     .tool--clipper {
-        top: -16px;
+        top: -15px;
         right: 8px;
     }
     .tool--spray,
@@ -1907,12 +2016,46 @@ body {
         display: none;
     }
     .tool--razor {
-        bottom: -16px;
+        bottom: -15px;
         left: 8px;
     }
     .tool--comb {
-        bottom: -16px;
+        bottom: -15px;
         right: 8px;
+    }
+}
+
+/* Extra Small Phones (<= 420px) */
+@media (max-width: 420px) {
+    .booking {
+        padding: 4.5rem 3% 5.5rem;
+    }
+
+    .booking__paper {
+        padding: 2rem 0.85rem;
+    }
+
+    .booking__row {
+        gap: 0.55rem;
+    }
+
+    .booking__label {
+        font-size: 0.76rem;
+    }
+
+    .booking__input {
+        padding: 0.65rem 0.6rem;
+        font-size: 14px;
+    }
+
+    .booking__select {
+        padding-right: 1.4rem;
+        background-position: right 0.4rem center;
+    }
+
+    .booking__textarea {
+        min-height: 75px;
+        padding: 0.65rem 0.6rem;
     }
 }
 
