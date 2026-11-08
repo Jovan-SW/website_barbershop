@@ -68,20 +68,30 @@
     </div>
 
     <!-- Navbar -->
-    <nav class="navbar">
+    <nav class="navbar" role="navigation" aria-label="Main Navigation">
         <a href="#" class="navbar-logo">Barber<span>'O</span></a>
 
-        <ul class="navbar-nav">
+        <ul class="navbar-nav" id="navbar-nav">
+            <li class="navbar-nav__header">
+                <span class="navbar-nav__title">Menu</span>
+                <button type="button" class="navbar-nav__close" id="navbar-close" aria-label="Close menu">
+                    <i data-feather="x"></i>
+                </button>
+            </li>
             <li><a href="#home">Home</a></li>
             <li><a href="#service">Services</a></li>
             <li><a href="#barbers">Barbers</a></li>
-            <li><a href="#booking">Book an Appointment</a></li>
+            <li><a href="#booking" class="nav-booking-cta">Book an Appointment</a></li>
         </ul>
 
         <div class="navbar-extra">
-            <a href="#" id="hamburger-menu"><i data-feather="menu"></i></a>
+            <button type="button" class="hamburger-btn" id="hamburger-menu" aria-label="Open navigation menu" aria-expanded="false" aria-controls="navbar-nav">
+                <i data-feather="menu"></i>
+            </button>
         </div>
     </nav>
+    <!-- Mobile Navigation Backdrop Overlay -->
+    <div class="navbar-backdrop" id="navbar-backdrop" aria-hidden="true"></div>
     
     <!-- Hero Section -->
     <section class="hero" id="home">
@@ -359,6 +369,12 @@
 
                 <div class="booking__paper">
                     <form class="booking__form" id="booking-form" novalidate>
+                        <!-- Anti-Bot Honeypot Protection (Invisible to humans, catches automated crawlers) -->
+                        <div class="booking__honey-pot" aria-hidden="true" style="opacity:0;position:absolute;top:0;left:0;height:0;width:0;z-index:-1;overflow:hidden;">
+                            <label for="booking_website_check">Leave this field blank</label>
+                            <input type="text" id="booking_website_check" name="website_verification" tabindex="-1" autocomplete="off">
+                        </div>
+
                         <div class="booking__form-header">
                             <h3>Appointment Form</h3>
                             <p>Fill out the details below</p>
@@ -477,7 +493,7 @@
                         </div>
 
                         <button class="booking__submit btn-primary" id="booking-submit-btn" type="submit">
-                            Book Now <i data-feather="check-circle"></i>
+                            Book via WhatsApp <i data-feather="message-circle"></i>
                         </button>
                     </form>
                 </div>
@@ -485,16 +501,29 @@
         </div>
     </section>
 
-    <!-- Success Popup Modal -->
+    <!-- Success / WhatsApp Redirect Modal -->
     <div class="modal" id="success-modal" aria-hidden="true">
         <div class="modal__overlay" id="modal-overlay"></div>
         <div class="modal__content">
-            <div class="modal__icon-wrapper">
-                <i data-feather="check" class="modal__icon"></i>
+            <div class="modal__icon-wrapper modal__icon--whatsapp">
+                <i data-feather="message-circle" class="modal__icon"></i>
             </div>
-            <h3 class="modal__title">Booking Confirmed!</h3>
-            <p class="modal__desc">Thank you for booking with Barber'O. We've received your request and will contact you shortly.</p>
-            <a href="#home" class="modal__close btn-primary" id="modal-close-btn">Back to Home</a>
+            <h3 class="modal__title">Booking Sent to WhatsApp!</h3>
+            <p class="modal__desc">Your appointment details have been prepared and redirected to our WhatsApp Business:</p>
+            
+            <div class="modal__booking-preview" id="modal-booking-preview">
+                <div class="preview-item"><span>Name:</span> <strong id="preview-name">-</strong></div>
+                <div class="preview-item"><span>Barber:</span> <strong id="preview-barber">-</strong></div>
+                <div class="preview-item"><span>Service:</span> <strong id="preview-service">-</strong></div>
+                <div class="preview-item"><span>Schedule:</span> <strong id="preview-schedule">-</strong></div>
+            </div>
+
+            <div class="modal__actions">
+                <a href="#" id="modal-wa-btn" target="_blank" rel="noopener noreferrer" class="btn-primary modal__btn-wa">
+                    <i data-feather="send"></i> Open WhatsApp
+                </a>
+                <button type="button" class="btn-secondary modal__close" id="modal-close-btn">Close</button>
+            </div>
         </div>
     </div>
 

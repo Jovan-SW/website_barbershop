@@ -28,19 +28,64 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-// Toggle class active untuk hamburger menu
-const navbarNav = document.querySelector('.navbar-nav');
-const hamburger = document.querySelector('#hamburger-menu');
+// MOBILE NAVBAR CONTROLLER //
+const navbarNav = document.getElementById('navbar-nav');
+const hamburger = document.getElementById('hamburger-menu');
+const navbarClose = document.getElementById('navbar-close');
+const navbarBackdrop = document.getElementById('navbar-backdrop');
 
-hamburger.addEventListener('click', function (e) {
-    navbarNav.classList.toggle('active');
-    e.preventDefault();
-});
+const closeMobileNav = () => {
+    if (!navbarNav) return;
+    navbarNav.classList.remove('active');
+    if (navbarBackdrop) navbarBackdrop.classList.remove('active');
+    if (hamburger) hamburger.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('nav-open');
+};
 
-// Klik di luar sidebar untuk menghilangkan nav
-document.addEventListener('click', function (e) {
-    if (!hamburger.contains(e.target) && !navbarNav.contains(e.target)) {
-        navbarNav.classList.remove('active');
+const openMobileNav = () => {
+    if (!navbarNav) return;
+    navbarNav.classList.add('active');
+    if (navbarBackdrop) navbarBackdrop.classList.add('active');
+    if (hamburger) hamburger.setAttribute('aria-expanded', 'true');
+    document.body.classList.add('nav-open');
+};
+
+if (hamburger) {
+    hamburger.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (navbarNav.classList.contains('active')) {
+            closeMobileNav();
+        } else {
+            openMobileNav();
+        }
+    });
+}
+
+if (navbarClose) {
+    navbarClose.addEventListener('click', function (e) {
+        e.preventDefault();
+        closeMobileNav();
+    });
+}
+
+if (navbarBackdrop) {
+    navbarBackdrop.addEventListener('click', closeMobileNav);
+}
+
+// Automatically close mobile menu when clicking any navigation link
+if (navbarNav) {
+    navbarNav.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            closeMobileNav();
+        });
+    });
+}
+
+// Close mobile navigation on Escape key press
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && navbarNav && navbarNav.classList.contains('active')) {
+        closeMobileNav();
     }
 });
 
@@ -154,6 +199,69 @@ const validateBookingField = (input) => {
 
     setFieldValidationUI(input, isValid, msg);
     return isValid;
+};
+
+// Secure Destination Resolver (Multi-layer XOR Cipher Obfuscation)
+// Prevents web scraping bots, crawler spiders, and contact harvesters from harvesting the phone number
+const resolveSecureEndpoint = () => {
+    // Encrypted payload decoded dynamically at runtime on trusted human action
+    const cipher = [12, 8, 2, 3, 13, 14, 14, 13, 9, 13, 9, 13];
+    const key = 0x3A;
+    const number = cipher.map(byte => String.fromCharCode(byte ^ key)).join('');
+    const protocol = atob('aHR0cHM6Ly93YS5tZS8='); // "https://wa.me/"
+    return { number, protocol };
+};
+
+// Input Sanitization to prevent XSS, phishing link injection, or malicious payload attacks
+const sanitizeText = (str, maxLength = 100) => {
+    if (!str) return '';
+    return str
+        .replace(/<[^>]*>?/gm, '') // Strip HTML tags
+        .replace(/[\r\n\t]+/g, ' ') // Clean suspicious line injections
+        .replace(/(https?:\/\/|www\.)\S+/gi, '[link removed]') // Remove potential phishing links
+        .trim()
+        .slice(0, maxLength);
+};
+
+// Formats YYYY-MM-DD into a human-readable string: e.g. "Tuesday, November 10, 2026"
+const formatDisplayDate = (dateStr) => {
+    if (!dateStr) return '';
+    try {
+        const [year, month, day] = dateStr.split('-');
+        const d = new Date(year, month - 1, day);
+        return d.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    } catch {
+        return dateStr;
+    }
+};
+
+// Generates ultra-clean, professional formatted WhatsApp reservation message
+const buildWhatsAppMessage = ({ name, barber, service, date, time, note, bookingRef }) => {
+    return [
+        '💈 *BARBER\'O BARBERSHOP*',
+        '*Appointment Reservation Request*',
+        '━━━━━━━━━━━━━━━━━━━━━━━━',
+        '',
+        'Hello Barber\'O Team,',
+        'I would like to book an appointment with the following details:',
+        '',
+        '📋 *RESERVATION DETAILS*',
+        `• *Booking ID:* #${bookingRef}`,
+        `• *Customer Name:* ${name}`,
+        `• *Preferred Barber:* ${barber}`,
+        `• *Selected Service:* ${service}`,
+        `• *Appointment Date:* ${date}`,
+        `• *Appointment Time:* ${time}`,
+        `• *Special Notes:* ${note}`,
+        '',
+        '━━━━━━━━━━━━━━━━━━━━━━━━',
+        'Please confirm if this slot is available. Thank you! 🙏'
+    ].join('\n');
 };
 
 // Form submission handler
@@ -291,8 +399,27 @@ if (bookingForm) {
         input.addEventListener('change', () => validateBookingField(input));
     });
 
+    // Anti-spam submission cooldown
+    let lastSubmitTime = 0;
+    const SUBMIT_COOLDOWN_MS = 3000;
+
     bookingForm.addEventListener('submit', function (e) {
         e.preventDefault();
+
+        // Anti-Bot Honeypot Security Check
+        const honeypot = document.getElementById('booking_website_check');
+        if (honeypot && honeypot.value.trim() !== '') {
+            // Silently drop bot submission
+            console.warn('Bot detected and dropped.');
+            return;
+        }
+
+        // Anti-Spam Rate Limiter (Cooldown)
+        const now = Date.now();
+        if (now - lastSubmitTime < SUBMIT_COOLDOWN_MS) {
+            return;
+        }
+        lastSubmitTime = now;
 
         // Form Validation: All required fields must be properly filled
         let isFormValid = true;
@@ -330,10 +457,74 @@ if (bookingForm) {
             return;
         }
 
-        // Booking Successful!
+        // 1. Gather all form values precisely as selected by the user
+        const nameInput = document.getElementById('name');
+        const barberSelect = document.getElementById('barber');
+        const serviceSelect = document.getElementById('service');
+        const noteInput = document.getElementById('note');
+
+        const customerName = sanitizeText(nameInput ? nameInput.value : '', 60);
+        const selectedBarber = barberSelect && barberSelect.selectedIndex >= 0 
+            ? sanitizeText(barberSelect.options[barberSelect.selectedIndex].text, 60) 
+            : 'Any Barber (First Available)';
+        const selectedService = serviceSelect && serviceSelect.selectedIndex >= 0 
+            ? sanitizeText(serviceSelect.options[serviceSelect.selectedIndex].text, 60) 
+            : '';
+        const rawDate = dateInput ? dateInput.value : '';
+        const formattedDate = formatDisplayDate(rawDate);
+        const chosenTime = sanitizeText(timeInput ? timeInput.value : '', 30);
+        const rawNote = noteInput ? noteInput.value.trim() : '';
+        const customerNote = rawNote ? sanitizeText(rawNote, 250) : '_No special requests_';
+        const bookingRef = 'BO-' + Math.floor(100000 + Math.random() * 900000);
+
+        // 2. Populate Modal Booking Summary Preview
+        const previewName = document.getElementById('preview-name');
+        const previewBarber = document.getElementById('preview-barber');
+        const previewService = document.getElementById('preview-service');
+        const previewSchedule = document.getElementById('preview-schedule');
+
+        if (previewName) previewName.textContent = customerName;
+        if (previewBarber) previewBarber.textContent = selectedBarber;
+        if (previewService) previewService.textContent = selectedService;
+        if (previewSchedule) previewSchedule.textContent = `${formattedDate} (${chosenTime})`;
+
+        // 3. Build WhatsApp Message & Obfuscated Target URL
+        const waMessage = buildWhatsAppMessage({
+            name: customerName,
+            barber: selectedBarber,
+            service: selectedService,
+            date: formattedDate,
+            time: chosenTime,
+            note: customerNote,
+            bookingRef: bookingRef
+        });
+
+        const { number, protocol } = resolveSecureEndpoint();
+        const waUrl = `${protocol}${number}?text=${encodeURIComponent(waMessage)}`;
+
+        // 4. Connect redirect button inside the confirmation modal
+        const modalWaBtn = document.getElementById('modal-wa-btn');
+        if (modalWaBtn) {
+            modalWaBtn.href = waUrl;
+        }
+
+        // 5. Open Confirmation Modal
         openModal(successModal);
 
-        // Reset form
+        // 6. Automatically redirect to WhatsApp Business with secure window flags
+        try {
+            const waWindow = window.open(waUrl, '_blank', 'noopener,noreferrer');
+            if (!waWindow || waWindow.closed || typeof waWindow.closed === 'undefined') {
+                // In case popup blockers intercept window.open on mobile, fallback smoothly
+                setTimeout(() => {
+                    window.location.href = waUrl;
+                }, 300);
+            }
+        } catch (err) {
+            window.location.href = waUrl;
+        }
+
+        // 6. Reset form
         bookingForm.reset();
 
         // Reset time chips & trigger state
