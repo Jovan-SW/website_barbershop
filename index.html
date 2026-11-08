@@ -79,37 +79,6 @@
         </ul>
 
         <div class="navbar-extra">
-            <a href="login.html" class="navbar-login-btn">
-                <span class="btn-fill"></span>
-                <span class="btn-scissor">
-                    <i data-feather="scissors"></i>
-                </span>
-                <span class="btn-content">
-                    <i data-feather="user"></i>
-                    <span>Login</span>
-                </span>
-            </a>
-
-            <!-- User Profile Avatar & Dropdown -->
-            <div class="navbar-user-profile" id="userProfile" style="display: none;">
-                <button class="profile-avatar" id="profileAvatar" type="button" aria-label="User profile">
-                    <span class="avatar-initial" id="avatarInitial">U</span>
-                </button>
-                <div class="profile-dropdown" id="profileDropdown">
-                    <div class="dropdown-header">
-                        <span class="dropdown-label">Signed in as</span>
-                        <span class="dropdown-email" id="dropdownEmail">user@barber.com</span>
-                    </div>
-                    <button id="LogoutBtn" class="navbar-logout-btn" type="button">
-                        <span class="logout-glow"></span>
-                        <span class="btn-content">
-                            <i data-feather="log-out"></i>
-                            <span>Logout</span>
-                        </span>
-                    </button>
-                </div>
-            </div>
-
             <a href="#" id="hamburger-menu"><i data-feather="menu"></i></a>
         </div>
     </nav>
@@ -389,16 +358,6 @@
                 </div>
 
                 <div class="booking__paper">
-                    <!-- Auth Notice (displayed when user is NOT logged in) -->
-                    <div class="booking__auth-notice" id="booking-auth-notice">
-                        <i data-feather="lock"></i>
-                        <div class="booking__auth-notice-text">
-                            <strong>Login Diperlukan untuk Booking</strong>
-                            <span>Silakan login terlebih dahulu untuk dapat memesan jadwal appointment di Barber'O.</span>
-                        </div>
-                        <a href="login.html" class="booking__auth-notice-btn">Login Sekarang</a>
-                    </div>
-
                     <form class="booking__form" id="booking-form" novalidate>
                         <div class="booking__form-header">
                             <h3>Appointment Form</h3>
@@ -409,23 +368,22 @@
                             <div class="booking__group" id="group-name">
                                 <label class="booking__label" for="name">Full Name *</label>
                                 <input class="booking__input" type="text" id="name" name="name" placeholder="John Doe" autocomplete="name" required>
-                                <span class="booking__field-error">Nama lengkap wajib diisi (minimal 3 huruf)</span>
+                                <span class="booking__field-error">Full name is required (at least 3 characters)</span>
                             </div>
-                            
-                            <div class="booking__group" id="group-phone">
-                                <label class="booking__label" for="phone">Phone *</label>
-                                <input class="booking__input" type="tel" id="phone" name="phone" placeholder="0812-3456-7890" autocomplete="tel" required>
-                                <span class="booking__field-error">Nomor telepon wajib diisi (10-15 digit)</span>
+
+                            <div class="booking__group" id="group-barber">
+                                <label class="booking__label" for="barber">Barber</label>
+                                <select class="booking__input booking__select" id="barber" name="barber">
+                                    <option value="any" selected>Any Barber (First Available)</option>
+                                    <option value="john">John Doe (Master Barber)</option>
+                                    <option value="jane">Jane Smith (Senior Barber)</option>
+                                    <option value="mike">Mike Johnson (Junior Barber)</option>
+                                    <option value="budi">Budi Santoso (Junior Barber)</option>
+                                </select>
                             </div>
                         </div>
 
                         <div class="booking__row">
-                            <div class="booking__group" id="group-email">
-                                <label class="booking__label" for="email">Email Address *</label>
-                                <input class="booking__input" type="email" id="email" name="email" placeholder="username@gmail.com" autocomplete="email" required readonly>
-                                <span class="booking__field-error">Format email tidak valid</span>
-                            </div>
-
                             <div class="booking__group" id="group-service">
                                 <label class="booking__label" for="service">Service *</label>
                                 <select class="booking__input booking__select" id="service" name="service" required>
@@ -436,22 +394,81 @@
                                     <option value="scalp">Scalp Treatment</option>
                                     <option value="shave">Hot Towel Shave</option>
                                 </select>
-                                <span class="booking__field-error">Harap pilih salah satu layanan</span>
+                                <span class="booking__field-error">Please select a service</span>
                             </div>
-                        </div>
 
-                        <div class="booking__row">
                             <div class="booking__group" id="group-date">
                                 <label class="booking__label" for="date">Date *</label>
                                 <input class="booking__input" type="date" id="date" name="date" required>
-                                <span class="booking__field-error">Tanggal booking wajib dipilih</span>
+                                <span class="booking__field-error">Please select a booking date</span>
                             </div>
+                        </div>
+
+                        <div class="booking__group booking__group--time" id="group-time">
+                            <label class="booking__label" for="time-picker-trigger">Preferred Time *</label>
                             
-                            <div class="booking__group" id="group-time">
-                                <label class="booking__label" for="time">Time *</label>
-                                <input class="booking__input" type="time" id="time" name="time" required>
-                                <span class="booking__field-error">Jam booking wajib dipilih</span>
+                            <div class="booking__time-select-container" id="time-select-container">
+                                <!-- Trigger Button (acts as interactive field) -->
+                                <button type="button" class="booking__input booking__time-trigger" id="time-picker-trigger" aria-haspopup="true" aria-expanded="false">
+                                    <span class="time-trigger__content">
+                                        <i data-feather="clock" class="time-trigger__icon"></i>
+                                        <span class="time-trigger__text" id="time-trigger-text">Select a time slot</span>
+                                    </span>
+                                    <i data-feather="chevron-down" class="time-trigger__arrow"></i>
+                                </button>
+
+                                <!-- Collapsible Time Slots Panel -->
+                                <div class="booking__time-dropdown" id="time-dropdown">
+                                    <div class="booking__time-dropdown-header">
+                                        <span class="dropdown-hours-badge">
+                                            <i data-feather="clock"></i> Hours: 08:00 AM - 08:00 PM
+                                        </span>
+                                        <span class="dropdown-break-badge">
+                                            <i data-feather="coffee"></i> Break: 12:00 PM - 01:00 PM
+                                        </span>
+                                    </div>
+
+                                    <div class="booking__time-wrapper" role="radiogroup" aria-label="Select Time Slot">
+                                        <!-- Morning -->
+                                        <div class="booking__time-period">
+                                            <div class="period-header">
+                                                <span class="period-title"><i data-feather="sun"></i> Morning</span>
+                                            </div>
+                                            <div class="time-chips-grid">
+                                                <button type="button" class="time-chip" data-time="09:00" data-display="09:00 AM">09:00 AM</button>
+                                                <button type="button" class="time-chip" data-time="10:30" data-display="10:30 AM">10:30 AM</button>
+                                                <button type="button" class="time-chip" data-time="11:30" data-display="11:30 AM">11:30 AM</button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Afternoon -->
+                                        <div class="booking__time-period">
+                                            <div class="period-header">
+                                                <span class="period-title"><i data-feather="cloud-sun"></i> Afternoon</span>
+                                            </div>
+                                            <div class="time-chips-grid">
+                                                <button type="button" class="time-chip" data-time="13:30" data-display="01:30 PM">01:30 PM</button>
+                                                <button type="button" class="time-chip" data-time="15:00" data-display="03:00 PM">03:00 PM</button>
+                                                <button type="button" class="time-chip" data-time="16:30" data-display="04:30 PM">04:30 PM</button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Evening -->
+                                        <div class="booking__time-period">
+                                            <div class="period-header">
+                                                <span class="period-title"><i data-feather="moon"></i> Evening</span>
+                                            </div>
+                                            <div class="time-chips-grid">
+                                                <button type="button" class="time-chip" data-time="18:00" data-display="06:00 PM">06:00 PM</button>
+                                                <button type="button" class="time-chip" data-time="19:30" data-display="07:30 PM">07:30 PM</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
+                            <input type="hidden" class="booking__input" id="time" name="time" required>
+                            <span class="booking__field-error">Please select a time slot</span>
                         </div>
 
                         <div class="booking__group" id="group-note">
@@ -481,21 +498,6 @@
         </div>
     </div>
 
-    <!-- Auth Required Popup Modal -->
-    <div class="modal" id="auth-modal" aria-hidden="true">
-        <div class="modal__overlay" id="auth-modal-overlay"></div>
-        <div class="modal__content">
-            <div class="modal__icon-wrapper" style="border-color: #ef4444; background: rgba(239, 68, 68, 0.1);">
-                <i data-feather="lock" class="modal__icon" style="color: #ef4444;"></i>
-            </div>
-            <h3 class="modal__title">Login Diperlukan</h3>
-            <p class="modal__desc">Maaf, Anda harus login ke akun Barber'O terlebih dahulu sebelum dapat memesan jadwal appointment.</p>
-            <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-                <a href="login.html" class="btn-primary" style="padding: 0.8rem 1.6rem;">Login Sekarang</a>
-                <button type="button" class="btn-secondary" id="auth-modal-close-btn" style="padding: 0.8rem 1.4rem; cursor: pointer; background: transparent; border: 1px solid var(--text-muted); color: var(--text-main); border-radius: 4px;">Tutup</button>
-            </div>
-        </div>
-    </div>
 
     <!-- Footer -->
     <footer class="footer">

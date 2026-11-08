@@ -73,20 +73,9 @@ document.addEventListener('click', function (e) {
 
 // BOOKING FORM & POPUP LOGIC //
 const bookingForm = document.getElementById('booking-form');
-const bookingAuthNotice = document.getElementById('booking-auth-notice');
 const successModal = document.getElementById('success-modal');
 const modalCloseBtn = document.getElementById('modal-close-btn');
 const modalOverlay = document.getElementById('modal-overlay');
-
-// Auth Required Modal Elements
-const authModal = document.getElementById('auth-modal');
-const authModalCloseBtn = document.getElementById('auth-modal-close-btn');
-const authModalOverlay = document.getElementById('auth-modal-overlay');
-
-// Helper: Check if user is authenticated
-const isUserLoggedIn = () => {
-    return Boolean(localStorage.getItem('auth_session'));
-};
 
 // Open and Close Modals
 const openModal = (modal) => {
@@ -105,14 +94,9 @@ const closeModal = (modal) => {
 if (modalCloseBtn) modalCloseBtn.addEventListener('click', () => closeModal(successModal));
 if (modalOverlay) modalOverlay.addEventListener('click', () => closeModal(successModal));
 
-if (authModalCloseBtn) authModalCloseBtn.addEventListener('click', () => closeModal(authModal));
-if (authModalOverlay) authModalOverlay.addEventListener('click', () => closeModal(authModal));
-
-// Validation Regex
+// Validation Rules
 const validationRules = {
-    minNameLength: 3,
-    phoneRegex: /^[0-9\-+\s]{10,15}$/,
-    emailRegex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    minNameLength: 3
 };
 
 // Updates visual state of a form field
@@ -142,27 +126,23 @@ const validateBookingField = (input) => {
     switch (input.id) {
         case 'name':
             isValid = val.length >= validationRules.minNameLength;
-            msg = 'Nama lengkap wajib diisi (minimal 3 huruf)';
+            msg = 'Full name is required (at least 3 characters)';
             break;
-        case 'phone':
-            isValid = validationRules.phoneRegex.test(val);
-            msg = 'Nomor telepon wajib diisi (10-15 digit angka)';
-            break;
-        case 'email':
-            isValid = validationRules.emailRegex.test(val);
-            msg = 'Format email tidak valid (contoh: name@example.com)';
+        case 'barber':
+            isValid = val !== '';
+            msg = 'Please select a barber';
             break;
         case 'service':
             isValid = val !== '';
-            msg = 'Harap pilih salah satu layanan';
+            msg = 'Please select a service';
             break;
         case 'date':
             isValid = val !== '';
-            msg = 'Tanggal booking wajib dipilih';
+            msg = 'Please select a booking date';
             break;
         case 'time':
             isValid = val !== '';
-            msg = 'Jam booking wajib dipilih';
+            msg = 'Please select a time slot';
             break;
         case 'note':
             // Optional field: always valid
@@ -176,87 +156,133 @@ const validateBookingField = (input) => {
     return isValid;
 };
 
-// Synchronizes the booking form state with user's login status
-const syncBookingFormAuthState = () => {
-    if (!bookingForm) return;
-
-    const loggedIn = isUserLoggedIn();
-    const inputs = bookingForm.querySelectorAll('.booking__input');
-    const submitBtn = document.getElementById('booking-submit-btn');
-    const emailInput = document.getElementById('email');
-    const nameInput = document.getElementById('name');
-    const authUserData = localStorage.getItem('auth_user');
-
-    if (loggedIn) {
-        // UNLOCKED: User is logged in
-        if (bookingAuthNotice) bookingAuthNotice.style.display = 'none';
-        bookingForm.classList.remove('is-locked');
-        inputs.forEach(input => {
-            input.disabled = false;
-        });
-        if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.style.cursor = 'pointer';
-        }
-
-        // Set minimum booking date to today
-        const dateInput = document.getElementById('date');
-        if (dateInput) {
-            const today = new Date().toISOString().split('T')[0];
-            dateInput.min = today;
-        }
-
-        // Auto-fill Name & Lock Email strictly to authenticated user
-        if (authUserData) {
-            try {
-                const user = JSON.parse(authUserData);
-                if (nameInput && !nameInput.value && user.name) {
-                    nameInput.value = user.name;
-                }
-                if (emailInput && user.email) {
-                    emailInput.value = user.email;
-                    emailInput.readOnly = true;
-                    emailInput.classList.add('is-readonly');
-                }
-            } catch (err) {
-                console.error('Error reading auth_user:', err);
-            }
-        }
-    } else {
-        // LOCKED: User is NOT logged in or has logged out
-        if (bookingAuthNotice) bookingAuthNotice.style.display = 'flex';
-        bookingForm.classList.add('is-locked');
-        inputs.forEach(input => {
-            input.disabled = true;
-            input.classList.remove('is-invalid');
-            const group = input.closest('.booking__group');
-            if (group) group.classList.remove('has-error');
-        });
-        if (emailInput) {
-            emailInput.value = '';
-            emailInput.readOnly = true;
-            emailInput.classList.remove('is-readonly');
-        }
-        if (submitBtn) {
-            submitBtn.disabled = true;
-            submitBtn.style.cursor = 'not-allowed';
-        }
-    }
-};
-
 // Form submission handler
 if (bookingForm) {
-    const emailInput = document.getElementById('email');
+    const timeInput = document.getElementById('time');
+    const timeChips = document.querySelectorAll('.time-chip');
+    const timeSelectContainer = document.getElementById('time-select-container');
+    const timeTrigger = document.getElementById('time-picker-trigger');
+    const timeTriggerText = document.getElementById('time-trigger-text');
+    const dateInput = document.getElementById('date');
+    const groupTime = document.getElementById('group-time');
 
-    // Prevent direct typing / paste into locked email input
-    if (emailInput) {
-        emailInput.addEventListener('keydown', (e) => {
-            if (emailInput.readOnly) e.preventDefault();
+    // Set minimum booking date to today
+    if (dateInput) {
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.min = today;
+    }
+
+    // Toggle Dropdown when clicking Time field trigger
+    if (timeTrigger && timeSelectContainer) {
+        timeTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            const isOpen = timeSelectContainer.classList.toggle('is-open');
+            timeTrigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         });
-        emailInput.addEventListener('paste', (e) => {
-            if (emailInput.readOnly) e.preventDefault();
+
+        // Close on clicking outside
+        document.addEventListener('click', (e) => {
+            if (!timeSelectContainer.contains(e.target)) {
+                timeSelectContainer.classList.remove('is-open');
+                timeTrigger.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && timeSelectContainer.classList.contains('is-open')) {
+                timeSelectContainer.classList.remove('is-open');
+                timeTrigger.setAttribute('aria-expanded', 'false');
+                timeTrigger.focus();
+            }
         });
     }
+
+    // Update time chips availability based on date (disable passed time for today)
+    const updateTimeChipsAvailability = () => {
+        if (!dateInput) return;
+        const selectedDate = dateInput.value;
+        const now = new Date();
+
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const todayStr = `${year}-${month}-${day}`;
+
+        const isToday = selectedDate === todayStr;
+        const currentTotalMinutes = now.getHours() * 60 + now.getMinutes();
+
+        timeChips.forEach(chip => {
+            const timeVal = chip.dataset.time;
+            if (!timeVal) return;
+            const [h, m] = timeVal.split(':').map(Number);
+            const slotTotalMinutes = h * 60 + m;
+
+            // If today and time has passed, disable
+            if (isToday && slotTotalMinutes <= currentTotalMinutes) {
+                chip.disabled = true;
+                chip.classList.add('is-disabled');
+                chip.setAttribute('aria-disabled', 'true');
+
+                // If previously selected slot is now disabled, reset selection
+                if (chip.classList.contains('is-selected')) {
+                    chip.classList.remove('is-selected');
+                    chip.setAttribute('aria-pressed', 'false');
+                    if (timeInput) timeInput.value = '';
+                    if (timeTriggerText) timeTriggerText.textContent = 'Select a time slot';
+                    if (timeTrigger) timeTrigger.classList.remove('has-value');
+                }
+            } else {
+                chip.disabled = false;
+                chip.classList.remove('is-disabled');
+                chip.removeAttribute('aria-disabled');
+            }
+        });
+    };
+
+    if (dateInput) {
+        dateInput.addEventListener('change', updateTimeChipsAvailability);
+        dateInput.addEventListener('input', updateTimeChipsAvailability);
+        updateTimeChipsAvailability();
+    }
+
+    // Time Slot Chip Selection Listener
+    timeChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            if (chip.disabled) return;
+
+            // Remove selected class from all chips
+            timeChips.forEach(c => {
+                c.classList.remove('is-selected');
+                c.setAttribute('aria-pressed', 'false');
+            });
+
+            // Mark clicked chip as selected
+            chip.classList.add('is-selected');
+            chip.setAttribute('aria-pressed', 'true');
+
+            // Store chosen display value in hidden input and trigger display
+            const chosenDisplay = chip.dataset.display || chip.textContent.trim();
+            if (timeInput) {
+                timeInput.value = chosenDisplay;
+                validateBookingField(timeInput);
+            }
+
+            if (timeTriggerText) {
+                timeTriggerText.textContent = chosenDisplay;
+            }
+
+            if (timeTrigger) {
+                timeTrigger.classList.add('has-value');
+            }
+
+            // Close dropdown smoothly
+            if (timeSelectContainer) {
+                timeSelectContainer.classList.remove('is-open');
+                timeTrigger.setAttribute('aria-expanded', 'false');
+            }
+        });
+    });
 
     // Real-time input validation on change/input
     const requiredInputs = bookingForm.querySelectorAll('.booking__input:not(#note)');
@@ -268,25 +294,7 @@ if (bookingForm) {
     bookingForm.addEventListener('submit', function (e) {
         e.preventDefault();
 
-        // 1. STRICT CHECK: User MUST be logged in to book!
-        if (!isUserLoggedIn()) {
-            openModal(authModal);
-            return;
-        }
-
-        // 2. ANTI-TAMPER / ANTI-SPAM: Guarantee email strictly matches authenticated user email
-        const authUserData = localStorage.getItem('auth_user');
-        if (authUserData && emailInput) {
-            try {
-                const user = JSON.parse(authUserData);
-                if (user.email) {
-                    emailInput.value = user.email;
-                    emailInput.readOnly = true;
-                }
-            } catch (err) {}
-        }
-
-        // 3. FORM VALIDATION: All required fields must be properly filled
+        // Form Validation: All required fields must be properly filled
         let isFormValid = true;
         let firstInvalidInput = null;
 
@@ -302,42 +310,47 @@ if (bookingForm) {
 
         // If any required field is empty or invalid, focus on the first error
         if (!isFormValid) {
-            if (firstInvalidInput) {
+            if (firstInvalidInput === timeInput) {
+                if (timeSelectContainer) {
+                    timeSelectContainer.classList.add('is-open');
+                    if (timeTrigger) timeTrigger.setAttribute('aria-expanded', 'true');
+                }
+                const firstAvailableChip = groupTime ? groupTime.querySelector('.time-chip:not(:disabled)') : null;
+                if (firstAvailableChip) {
+                    firstAvailableChip.focus();
+                } else if (timeTrigger) {
+                    timeTrigger.focus();
+                }
+                if (groupTime) {
+                    groupTime.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            } else if (firstInvalidInput) {
                 firstInvalidInput.focus();
             }
             return;
         }
 
-        // 4. BOOKING SUCCESSFUL!
+        // Booking Successful!
         openModal(successModal);
 
-        // Reset variable fields except user's registered name & locked email
-        const phoneInput = document.getElementById('phone');
-        const serviceInput = document.getElementById('service');
-        const dateInput = document.getElementById('date');
-        const timeInput = document.getElementById('time');
-        const noteInput = document.getElementById('note');
+        // Reset form
+        bookingForm.reset();
 
-        if (phoneInput) phoneInput.value = '';
-        if (serviceInput) serviceInput.selectedIndex = 0;
-        if (dateInput) dateInput.value = '';
+        // Reset time chips & trigger state
+        timeChips.forEach(c => {
+            c.classList.remove('is-selected');
+            c.setAttribute('aria-pressed', 'false');
+        });
         if (timeInput) timeInput.value = '';
-        if (noteInput) noteInput.value = '';
-
-        // Re-lock and restore user's registered credentials
-        if (authUserData) {
-            try {
-                const user = JSON.parse(authUserData);
-                const nameInput = document.getElementById('name');
-                if (user.email && emailInput) {
-                    emailInput.value = user.email;
-                    emailInput.readOnly = true;
-                }
-                if (user.name && nameInput) {
-                    nameInput.value = user.name;
-                }
-            } catch (err) {}
+        if (timeTriggerText) timeTriggerText.textContent = 'Select a time slot';
+        if (timeTrigger) timeTrigger.classList.remove('has-value');
+        if (timeSelectContainer) {
+            timeSelectContainer.classList.remove('is-open');
+            if (timeTrigger) timeTrigger.setAttribute('aria-expanded', 'false');
         }
+
+        // Re-check time chips availability
+        updateTimeChipsAvailability();
 
         // Clear error highlights
         requiredInputs.forEach(input => {
@@ -347,68 +360,3 @@ if (bookingForm) {
         });
     });
 }
-
-// Authentication State Synchronization & Logout Handler
-document.addEventListener('DOMContentLoaded', () => {
-    const session = localStorage.getItem('auth_session');
-    const authUserData = localStorage.getItem('auth_user');
-    const loginBtn = document.querySelector('.navbar-login-btn');
-    const userProfile = document.getElementById('userProfile');
-    const avatarInitial = document.getElementById('avatarInitial');
-    const dropdownEmail = document.getElementById('dropdownEmail');
-    const logoutBtn = document.getElementById('LogoutBtn');
-    const profileAvatar = document.getElementById('profileAvatar');
-    const profileDropdown = document.getElementById('profileDropdown');
-
-    // UI State Toggling
-    if (session) {
-        if (loginBtn) loginBtn.style.display = 'none';
-        if (userProfile) userProfile.style.display = 'inline-flex';
-
-        // Extract user email and set initial letter
-        let email = '';
-        if (authUserData) {
-            try {
-                const user = JSON.parse(authUserData);
-                email = user.email || '';
-            } catch (err) {
-                console.error('Error reading auth_user:', err);
-            }
-        }
-
-        // Set initial letter
-        const initial = email ? email.trim().charAt(0).toUpperCase() : 'U';
-        if (avatarInitial) avatarInitial.textContent = initial;
-        if (dropdownEmail) dropdownEmail.textContent = email || 'User Account';
-    } else {
-        if (loginBtn) loginBtn.style.display = 'inline-flex';
-        if (userProfile) userProfile.style.display = 'none';
-    }
-
-    // Synchronize booking appointment form state (Lock/Unlock)
-    syncBookingFormAuthState();
-
-    // Toggle dropdown on click (support for mobile & touch)
-    if (profileAvatar && profileDropdown) {
-        profileAvatar.addEventListener('click', (e) => {
-            e.stopPropagation();
-            profileDropdown.classList.toggle('is-open');
-        });
-
-        document.addEventListener('click', (e) => {
-            if (userProfile && !userProfile.contains(e.target)) {
-                profileDropdown.classList.remove('is-open');
-            }
-        });
-    }
-
-    // Logout Action Handler
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            localStorage.removeItem('auth_session');
-            localStorage.removeItem('auth_user');
-            window.location.reload();
-        });
-    }
-});
